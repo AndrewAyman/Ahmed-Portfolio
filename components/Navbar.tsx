@@ -20,6 +20,7 @@ export default function Navbar() {
     { label: "Services", href: "#services" },
     { label: "Pricing",  href: "#pricing" },
     { label: "Reviews",  href: "#reviews" },
+    { label: "Contact",  href: "/contact" },  // ← الجديد
   ];
 
   const stagger = {
@@ -106,7 +107,7 @@ export default function Navbar() {
               ))}
             </motion.div>
 
-            {/* CTA */}
+            {/* CTA — Book Now */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}

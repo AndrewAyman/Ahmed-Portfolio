@@ -156,7 +156,7 @@ export default function HomePage() {
             Ready?
           </p>
           <h2 className="font-bebas text-6xl md:text-8xl text-white tracking-widest mb-8">
-            Let's Make Magic
+            Lets Make Magic
           </h2>
           <Link
             href="/booking"
