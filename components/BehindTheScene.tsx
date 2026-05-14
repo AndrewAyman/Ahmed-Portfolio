@@ -26,7 +26,7 @@ const PHOTOGRAPHER_IMAGES = [
   },
 ];
 
-// صور Behind the scene - 3 صور (نفس الصور أو صور مختلفة)
+// صور Behind the scene - 3 صور
 const BEHIND_SCENE_IMAGES = [
   {
     id: 1,
@@ -70,7 +70,7 @@ export default function BehindTheScene() {
         ].join(", "),
       }}
     >
-      {/* Animated red glow effects - intensified */}
+      {/* Animated red glow effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full"
@@ -105,25 +105,6 @@ export default function BehindTheScene() {
             duration: 7,
             repeat: Infinity,
             ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="absolute top-0 right-0 w-[450px] h-[450px] rounded-full"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(200,0,0,0.3) 0%, rgba(139,0,0,0.12) 60%, transparent 100%)",
-            filter: "blur(65px)",
-          }}
-          animate={{
-            x: [0, -50, 0],
-            y: [0, 30, 0],
-            opacity: [0.3, 0.7, 0.3],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1,
           }}
         />
       </div>
@@ -229,9 +210,9 @@ export default function BehindTheScene() {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4 pt-4">
               {[
-                { label: "Years Exp", value: "4+" },
-                { label: "Projects", value: "50+" },
-                { label: "Clients", value: "40+" },
+                { label: "Years Exp", value: "8+" },
+                { label: "Projects", value: "200+" },
+                { label: "Clients", value: "150+" },
               ].map((stat) => (
                 <div key={stat.label} className="text-center">
                   <p
@@ -263,7 +244,7 @@ export default function BehindTheScene() {
             className="relative"
           >
             <div className="grid grid-cols-3 gap-3">
-              {PHOTOGRAPHER_IMAGES.map((img, idx) => (
+              {PHOTOGRAPHER_IMAGES.map((img) => (
                 <motion.div
                   key={img.id}
                   className="relative overflow-hidden cursor-pointer"
@@ -301,7 +282,6 @@ export default function BehindTheScene() {
                 </motion.div>
               ))}
             </div>
-            {/* Decorative red line */}
             <div className="absolute -bottom-6 right-0 w-24 h-px bg-red-600/30" />
           </motion.div>
         </div>
