@@ -1,146 +1,227 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 interface IntroAnimationProps {
   onComplete: () => void;
 }
 
+type Phase = "start" | "logo" | "tagline" | "exit";
+
 export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
-  const [phase, setPhase] = useState<"image" | "logo" | "tagline" | "exit">("image");
+  const [phase, setPhase] = useState<Phase>("start");
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase("logo"), 800);
-    const t2 = setTimeout(() => setPhase("tagline"), 1800);
-    const t3 = setTimeout(() => setPhase("exit"), 3200);
-    const t4 = setTimeout(() => onComplete(), 4000);
-
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
-      clearTimeout(t4);
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
     };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const runTimeline = useCallback(() => {
+    const timers = [
+      setTimeout(() => setPhase("logo"), 600),
+      setTimeout(() => setPhase("tagline"), 1900),
+      setTimeout(() => setPhase("exit"), 3600),
+      setTimeout(() => onComplete(), 4400),
+    ];
+    return () => timers.forEach(clearTimeout);
   }, [onComplete]);
+
+  useEffect(runTimeline, [runTimeline]);
+
+  const show = phase === "logo" || phase === "tagline";
 
   return (
     <AnimatePresence>
-      {phase !== "exit" ? (
+      {phase !== "exit" && (
         <motion.div
           key="intro"
           className="fixed inset-0 z-50 flex items-center justify-center bg-black overflow-hidden"
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
+          transition={{ duration: 0.9, ease: "easeInOut" }}
+          aria-hidden="true"
         >
-          {/* Animated red glow background — no image needed */}
+          {/* ── Photographer image (background) ── */}
           <motion.div
             className="absolute inset-0"
+            initial={{ opacity: 0, scale: 1.06 }}
+            animate={{ opacity: show ? 1 : 0, scale: show ? 1 : 1.06 }}
+            transition={{ duration: 1.4, ease: "easeOut" }}
+          >
+            <Image
+              src="/images/Oss.png"
+              alt=""
+              fill
+              priority
+              fetchPriority="high"
+              sizes="100vw"
+              className="object-cover object-center"
+              quality={85}
+            />
+            {/* dark + red vignette overlay */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.45) 40%, rgba(0,0,0,0.55) 100%)",
+              }}
+            />
+            {/* subtle red tint matching photo mood */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background: "rgba(120,0,0,0.18)",
+                mixBlendMode: "multiply",
+              }}
+            />
+          </motion.div>
+
+          {/* ── Red glow pulse ── */}
+          <motion.div
+            className="absolute inset-0 pointer-events-none"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.2 }}
+            animate={{ opacity: show ? 1 : 0 }}
+            transition={{ duration: 1.6 }}
             style={{
               background:
-                "radial-gradient(ellipse at 60% 40%, rgba(204,0,0,0.12) 0%, transparent 70%)",
+                "radial-gradient(ellipse at 50% 80%, rgba(204,0,0,0.22) 0%, transparent 60%)",
             }}
           />
 
-          {/* Red line top */}
+          {/* ── Top red line ── */}
           <motion.div
-            className="absolute top-0 left-0 h-[2px] bg-red"
+            className="absolute top-0 left-0 h-[2px] bg-red-600"
             initial={{ width: "0%" }}
-            animate={{ width: phase !== "image" ? "100%" : "0%" }}
-            transition={{ duration: 1, ease: "easeInOut" }}
+            animate={{ width: show ? "100%" : "0%" }}
+            transition={{ duration: 1.1, ease: "easeInOut" }}
           />
 
-          {/* Red line bottom */}
+          {/* ── Bottom red line ── */}
           <motion.div
-            className="absolute bottom-0 right-0 h-[2px] bg-red"
+            className="absolute bottom-0 right-0 h-[2px] bg-red-600"
             initial={{ width: "0%" }}
-            animate={{ width: phase !== "image" ? "100%" : "0%" }}
-            transition={{ duration: 1, ease: "easeInOut", delay: 0.2 }}
+            animate={{ width: show ? "100%" : "0%" }}
+            transition={{ duration: 1.1, ease: "easeInOut", delay: 0.15 }}
           />
 
-          {/* Center content */}
-          <div className="relative z-10 flex flex-col items-center gap-4 text-center">
-
-            {/* Logo mark */}
+          {/* ── Center content ── */}
+          <div className="relative z-10 flex flex-col items-center gap-7 text-center px-8">
+            {/* Corner TL */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
+              initial={{ opacity: 0, x: -8, y: -8 }}
+              animate={{ opacity: show ? 1 : 0, x: 0, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="absolute -top-12 -left-12 w-8 h-8 border-t-2 border-l-2 border-red-600"
+            />
+            {/* Corner BR */}
+            <motion.div
+              initial={{ opacity: 0, x: 8, y: 8 }}
+              animate={{ opacity: show ? 1 : 0, x: 0, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="absolute -bottom-12 -right-12 w-8 h-8 border-b-2 border-r-2 border-red-600"
+            />
+
+            {/* ── Logo ── */}
+            <motion.div
+              initial={{ opacity: 0, y: 24, scale: 0.88 }}
               animate={{
-                opacity: phase === "logo" || phase === "tagline" ? 1 : 0,
-                scale: phase === "logo" || phase === "tagline" ? 1 : 0.8,
+                opacity: show ? 1 : 0,
+                y: show ? 0 : 24,
+                scale: show ? 1 : 0.88,
               }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
+              transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+              className="relative"
             >
-              <div className="relative w-20 h-20">
-                <motion.div
-                  className="absolute inset-0 border-2 border-red rotate-45"
-                  animate={{
-                    boxShadow: [
-                      "0 0 20px rgba(204,0,0,0.3)",
-                      "0 0 40px rgba(204,0,0,0.7)",
-                      "0 0 20px rgba(204,0,0,0.3)",
-                    ],
+              {/* glow bloom behind logo */}
+              <motion.div
+                className="absolute inset-0 blur-3xl pointer-events-none"
+                animate={{ opacity: [0.15, 0.4, 0.15] }}
+                transition={{ duration: 3, repeat: Infinity }}
+                style={{ background: "rgba(204,0,0,0.3)" }}
+              />
+
+              <div
+                className="relative overflow-hidden"
+                style={{ width: 320, height: 130 }}
+              >
+                <Image
+                  src="/images/black logo-02.png"
+                  alt="Ahmed Osama Production"
+                  fill
+                  priority
+                  fetchPriority="high"
+                  sizes="320px"
+                  className="object-contain"
+                  style={{
+                    transform: "scale(1.8)",
+                    transformOrigin: "center center",
                   }}
-                  transition={{ duration: 2, repeat: Infinity }}
                 />
-                <div className="absolute inset-2 border border-red/40 rotate-45" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span
-                    className="text-3xl text-red tracking-widest"
-                    style={{ fontFamily: "var(--font-bebas)" }}
-                  >
-                    RE
-                  </span>
-                </div>
               </div>
             </motion.div>
 
-            {/* Brand name */}
+            {/* ── Tagline - Responsive: Mobile (parallel lines) | Windows (single line) ── */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{
-                opacity: phase === "logo" || phase === "tagline" ? 1 : 0,
-              }}
-              transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-            >
-              <h1
-                className="text-7xl md:text-9xl text-white"
-                style={{ fontFamily: "var(--font-bebas)", letterSpacing: "0.3em" }}
-              >
-                RED <span className="text-red">EDE</span>
-              </h1>
-            </motion.div>
-
-            {/* Tagline */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 14 }}
               animate={{
                 opacity: phase === "tagline" ? 1 : 0,
-                y: phase === "tagline" ? 0 : 20,
+                y: phase === "tagline" ? 0 : 14,
               }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              className="text-sm text-white/50 uppercase"
-              style={{ fontFamily: "var(--font-condensed)", letterSpacing: "0.4em" }}
+              transition={{ duration: 0.7, ease: "easeOut" }}
+              className="flex flex-col items-center gap-3"
             >
-              Capture the moment · Feel the story
-            </motion.p>
+              <motion.div
+                className="h-px bg-red-600"
+                initial={{ width: 0 }}
+                animate={{ width: phase === "tagline" ? 56 : 0 }}
+                transition={{ duration: 0.6 }}
+              />
 
-            {/* Corner decorations */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: phase === "tagline" ? 1 : 0 }}
-              className="absolute -top-8 -left-16 w-8 h-8 border-t-2 border-l-2 border-red"
-            />
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: phase === "tagline" ? 1 : 0 }}
-              className="absolute -bottom-8 -right-16 w-8 h-8 border-b-2 border-r-2 border-red"
-            />
+              {/* Responsive text layout */}
+              {isMobile ? (
+                // Mobile: Two parallel lines
+                <div className="flex flex-col items-center gap-1">
+                  <p
+                    className="text-[11px] text-white/45 uppercase whitespace-nowrap"
+                    style={{
+                      fontFamily: "var(--font-condensed)",
+                      letterSpacing: "0.52em",
+                    }}
+                  >
+                    Capture the moment
+                  </p>
+                  <p
+                    className="text-[11px] text-white/45 uppercase whitespace-nowrap"
+                    style={{
+                      fontFamily: "var(--font-condensed)",
+                      letterSpacing: "0.52em",
+                    }}
+                  >
+                    Feel the story
+                  </p>
+                </div>
+              ) : (
+                // Desktop: Single line
+                <p
+                  className="text-[11px] text-white/45 uppercase whitespace-nowrap"
+                  style={{
+                    fontFamily: "var(--font-condensed)",
+                    letterSpacing: "0.52em",
+                  }}
+                >
+                  Capture the moment · Feel the story
+                </p>
+              )}
+            </motion.div>
           </div>
         </motion.div>
-      ) : null}
+      )}
     </AnimatePresence>
   );
 }

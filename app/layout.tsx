@@ -23,8 +23,8 @@ const barlowCondensed = Barlow_Condensed({
 });
 
 export const metadata: Metadata = {
-  title: "RED EDE — Photography",
-  description: "Professional photography — Weddings, Portraits, Fashion & Commercial",
+  title: "Ahmed Portfolio",
+  description: "Professional photography, Portraits, Fashion & Commercial",
 };
 
 export default function RootLayout({
@@ -33,9 +33,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="[font-feature-settings:'rlig']">
       <body
-        className={`${bebasNeue.variable} ${barlow.variable} ${barlowCondensed.variable} bg-black text-white antialiased`}
+        suppressHydrationWarning
+        className={`${bebasNeue.variable} ${barlow.variable} ${barlowCondensed.variable} bg-black text-white`}
       >
         {children}
         <ToastContainer

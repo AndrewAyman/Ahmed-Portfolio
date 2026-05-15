@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import { motion, AnimatePresence, Variants } from "framer-motion"; // تأكد من إضافة Variants هنا
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -16,21 +17,46 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { label: "Work",     href: "#gallery" },
-    { label: "Services", href: "#services" },
-    { label: "Pricing",  href: "#pricing" },
-    { label: "Reviews",  href: "#reviews" },
+    { label: "Portfolio", href: "/home" },
+    { label: "Services", href: "/services" },
+    { label: "Questions", href: "/contact" },
+    { label: "Vlogs", href: "/vlogs" },
   ];
 
-  const stagger = {
+  // الإصلاح: تعريف النوع لضمان تجاوز الـ Build بنجاح
+  const stagger: Variants = {
     hidden: {},
     show: { transition: { staggerChildren: 0.07, delayChildren: 0.3 } },
   };
 
-  const linkItem = {
+  const linkItem: Variants = {
     hidden: { opacity: 0, y: -12 },
-    show:   { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+    show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
   };
+  /* 
+    Logo helper — the PNG is 1080×1080 with heavy transparent padding.
+    We use a clip container + scale + translate to zoom into the artwork.
+    translateY can be tuned: negative = move artwork UP inside frame.
+  */
+  const LogoImage = ({ width, height }: { width: number; height: number }) => (
+    <div
+      className="relative overflow-hidden shrink-0"
+      style={{ width, height }}
+    >
+      <Image
+        src="/images/black logo-02.png"
+        alt="Ahmed Osama Production"
+        fill
+        className="object-contain"
+        style={{
+          /* scale up to fill, then shift DOWN so top isn't clipped */
+          transform: "scale(2.8) translateY(8%)",
+          transformOrigin: "center center",
+        }}
+        priority
+      />
+    </div>
+  );
 
   return (
     <>
@@ -40,46 +66,34 @@ export default function Navbar() {
         transition={{ duration: 0.6 }}
         className="fixed top-0 left-0 right-0 z-50"
       >
-        {/* top red accent line */}
+        {/* top red line */}
         <motion.div
-          className="absolute top-0 left-0 h-[2px] bg-red"
+          className="absolute top-0 left-0 h-[2px] bg-red-600"
           initial={{ width: "0%" }}
           animate={{ width: "100%" }}
           transition={{ duration: 1.2, ease: "easeInOut", delay: 0.4 }}
         />
 
-        <div className={`transition-all duration-500 ${scrolled ? "bg-black/95 backdrop-blur-lg" : "bg-transparent"}`}>
-          <div className="flex items-center justify-between px-10 md:px-20 h-[72px]">
-
-            {/* Logo */}
+        <div
+          className="transition-all duration-500"
+          style={{
+            background: scrolled ? "rgba(10,10,10,0.96)" : "transparent",
+            backdropFilter: scrolled ? "blur(16px)" : "none",
+          }}
+        >
+          <div className="flex items-center justify-between px-8 md:px-16 h-[72px]">
+            {/* ── Logo ── */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <Link href="/" className="flex items-center gap-3 group">
-                <div className="relative w-9 h-9 flex items-center justify-center">
-                  <motion.div
-                    className="absolute inset-0 border border-red rotate-45"
-                    whileHover={{ rotate: 90, scale: 1.1 }}
-                    transition={{ duration: 0.4 }}
-                  />
-                  <span className="font-bebas text-[11px] text-red z-10" style={{ letterSpacing: "0.05em" }}>
-                    RE
-                  </span>
-                </div>
-                <div className="flex flex-col leading-none">
-                  <span className="font-bebas text-lg tracking-[0.3em] text-white">
-                    RED <span className="text-red">EDE</span>
-                  </span>
-                  <span className="font-condensed text-[9px] tracking-[0.5em] text-white/30 uppercase" style={{ marginTop: "1px" }}>
-                    Photography
-                  </span>
-                </div>
+              <Link href="/" className="block">
+                <LogoImage width={160} height={52} />
               </Link>
             </motion.div>
 
-            {/* Desktop links */}
+            {/* ── Desktop center links ── */}
             <motion.div
               variants={stagger}
               initial="hidden"
@@ -92,21 +106,22 @@ export default function Navbar() {
                   href={link.href}
                   variants={linkItem}
                   onClick={() => setActiveLink(link.label)}
-                  className="relative group font-condensed text-[11px] tracking-[0.4em] uppercase text-white/35 hover:text-white transition-colors duration-300"
+                  className="relative group text-[11px] tracking-[0.4em] uppercase text-white/35 hover:text-white transition-colors duration-300"
+                  style={{ fontFamily: "var(--font-condensed)" }}
                 >
                   {link.label}
-                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-red group-hover:w-full transition-all duration-300" />
+                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-red-600 group-hover:w-full transition-all duration-300" />
                   {activeLink === link.label && (
                     <motion.span
                       layoutId="nav-dot"
-                      className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-red"
+                      className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-red-600"
                     />
                   )}
                 </motion.a>
               ))}
             </motion.div>
 
-            {/* CTA */}
+            {/* ── Desktop CTA ── */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -115,27 +130,50 @@ export default function Navbar() {
             >
               <div className="w-px h-5 bg-white/10" />
               <Link
-                href="/booking"
-                className="relative group overflow-hidden font-condensed text-[11px] tracking-[0.4em] uppercase px-5 py-2.5 border border-red/50 text-red transition-all duration-300 hover:text-white hover:border-red"
+                href="/contact"
+                className="relative group overflow-hidden text-[11px] tracking-[0.4em] uppercase px-5 py-2.5 border border-red-600/50 text-red-600 transition-all duration-300 hover:text-white hover:border-red-600"
+                style={{ fontFamily: "var(--font-condensed)" }}
               >
-                <span className="absolute inset-0 bg-red scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
-                <span className="relative z-10">Book Now</span>
+                <span className="absolute inset-0 bg-red-600 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
+                <span className="relative z-10">CONTACT Now</span>
               </Link>
             </motion.div>
 
-            {/* Mobile hamburger */}
-            <button className="md:hidden flex flex-col gap-[5px] p-2" onClick={() => setMenuOpen(!menuOpen)}>
-              <motion.span animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 7 : 0 }} transition={{ duration: 0.3 }} className="block w-6 h-px bg-white" />
-              <motion.span animate={{ opacity: menuOpen ? 0 : 1, scaleX: menuOpen ? 0 : 1 }} transition={{ duration: 0.2 }} className="block w-4 h-px bg-red" />
-              <motion.span animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -7 : 0 }} transition={{ duration: 0.3 }} className="block w-6 h-px bg-white" />
+            {/* ── Mobile hamburger ── */}
+            <button
+              className="md:hidden flex flex-col gap-[5px] p-2"
+              onClick={() => setMenuOpen(!menuOpen)}
+            >
+              <motion.span
+                animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 7 : 0 }}
+                transition={{ duration: 0.3 }}
+                className="block w-6 h-px bg-white"
+              />
+              <motion.span
+                animate={{
+                  opacity: menuOpen ? 0 : 1,
+                  scaleX: menuOpen ? 0 : 1,
+                }}
+                transition={{ duration: 0.2 }}
+                className="block w-4 h-px bg-red-600"
+              />
+              <motion.span
+                animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -7 : 0 }}
+                transition={{ duration: 0.3 }}
+                className="block w-6 h-px bg-white"
+              />
             </button>
           </div>
 
-          <motion.div className="h-px bg-white/5" animate={{ opacity: scrolled ? 1 : 0 }} transition={{ duration: 0.3 }} />
+          <motion.div
+            className="h-px bg-white/5"
+            animate={{ opacity: scrolled ? 1 : 0 }}
+            transition={{ duration: 0.3 }}
+          />
         </div>
       </motion.nav>
 
-      {/* Mobile fullscreen menu */}
+      {/* ── Mobile fullscreen menu ── */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -143,41 +181,61 @@ export default function Navbar() {
             animate={{ clipPath: "inset(0 0 0% 0)" }}
             exit={{ clipPath: "inset(0 0 100% 0)" }}
             transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
-            className="fixed inset-0 z-40 bg-black flex flex-col items-start justify-end px-10 pb-16"
+            className="fixed inset-0 z-40 bg-black flex flex-col items-start justify-end px-8 pb-16"
           >
-            <span className="absolute top-24 right-8 font-bebas text-[120px] text-white/[0.03] leading-none select-none">
+            {/* bg watermark */}
+            <span
+              className="absolute top-24 right-6 text-[100px] text-white/[0.03] leading-none select-none"
+              style={{ fontFamily: "var(--font-bebas)" }}
+            >
               MENU
             </span>
 
-            <div className="flex flex-col gap-2 mb-12">
+            {/* Logo in mobile menu header */}
+            <div
+              className="absolute top-0 left-0 right-0 h-[64px] flex items-center px-8"
+              style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}
+            >
+              <LogoImage width={140} height={46} />
+            </div>
+
+            {/* Nav links */}
+            <div className="flex flex-col gap-1 mb-10 mt-4">
               {navLinks.map((link, i) => (
                 <motion.a
                   key={link.label}
                   href={link.href}
                   initial={{ opacity: 0, x: -40 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.1 + i * 0.07, duration: 0.5, ease: "easeOut" }}
+                  transition={{
+                    delay: 0.15 + i * 0.07,
+                    duration: 0.5,
+                    ease: "easeOut",
+                  }}
                   onClick={() => setMenuOpen(false)}
-                  className="font-bebas text-6xl tracking-widest text-white/80 hover:text-red transition-colors duration-300 leading-tight"
+                  className="text-[56px] tracking-widest text-white/75 hover:text-red-600 transition-colors duration-300 leading-tight"
+                  style={{ fontFamily: "var(--font-bebas)" }}
                 >
                   {link.label}
                 </motion.a>
               ))}
             </div>
 
+            {/* Book CTA */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.45 }}
-              className="flex flex-col gap-4"
+              transition={{ delay: 0.5 }}
+              className="flex flex-col gap-3"
             >
-              <div className="w-12 h-px bg-red mb-2" />
+              <div className="w-10 h-px bg-red-600 mb-1" />
               <Link
-                href="/booking"
+                href="/contact"
                 onClick={() => setMenuOpen(false)}
-                className="font-condensed text-sm tracking-[0.4em] uppercase px-8 py-3 border border-red text-red hover:bg-red hover:text-white transition-all duration-300 self-start"
+                className="text-sm tracking-[0.4em] uppercase px-8 py-3 border border-red-600 text-red-600 hover:bg-red-600 hover:text-white transition-all duration-300 self-start"
+                style={{ fontFamily: "var(--font-condensed)" }}
               >
-                Book a Session
+                Contact Now
               </Link>
             </motion.div>
           </motion.div>

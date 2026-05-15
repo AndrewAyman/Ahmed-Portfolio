@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
+import { motion, AnimatePresence, useInView, Variants } from "framer-motion"; // تأكد من إضافة Variants هنا
 import { toast } from "react-toastify";
 
 const services = ["Wedding", "Portrait", "Fashion", "Commercial", "Other"];
 
-const fadeUp = {
+// تعريف النوع هنا يحل مشكلة الـ Build تماماً
+const fadeUp: Variants = {
   hidden: { opacity: 0, y: 24 },
   show: (i: number) => ({
     opacity: 1,
@@ -44,7 +45,7 @@ export default function BookingForm() {
       });
       const data = await res.json();
       if (data.success) {
-        toast.success("Sent! We'll be in touch within 24 hours.", { icon: "📷" });
+       toast.success("Sent! We'll be in touch within 24 hours.", { icon: <span>📷</span> });
         setForm({ name: "", email: "", phone: "", service: "", date: "", message: "" });
       } else throw new Error();
     } catch {

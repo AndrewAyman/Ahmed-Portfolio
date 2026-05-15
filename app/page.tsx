@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import IntroAnimation from "@/components/IntroAnimation";
 import VideoGate from "@/components/VideoGate";
 import ChoiceCircles from "@/components/ChoiceCircles";
@@ -32,7 +32,7 @@ export default function EntryPage() {
   }, []);
 
   return (
-    <main className="relative w-full h-screen bg-black overflow-hidden grain">
+    <main className="w-full h-full bg-black overflow-hidden grain custom-cursor-active">
       {/* Custom cursor */}
       <div
         className="cursor-dot"
