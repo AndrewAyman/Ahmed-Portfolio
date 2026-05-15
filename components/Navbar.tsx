@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, AnimatePresence, Variants } from "framer-motion"; // تأكد من إضافة Variants هنا
+import { motion, AnimatePresence, Variants } from "framer-motion";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -23,7 +23,6 @@ export default function Navbar() {
     { label: "Vlogs", href: "/vlogs" },
   ];
 
-  // الإصلاح: تعريف النوع لضمان تجاوز الـ Build بنجاح
   const stagger: Variants = {
     hidden: {},
     show: { transition: { staggerChildren: 0.07, delayChildren: 0.3 } },
@@ -33,14 +32,11 @@ export default function Navbar() {
     hidden: { opacity: 0, y: -12 },
     show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
   };
-  /* 
-    Logo helper — the PNG is 1080×1080 with heavy transparent padding.
-    We use a clip container + scale + translate to zoom into the artwork.
-    translateY can be tuned: negative = move artwork UP inside frame.
-  */
+
+  /* ── Logo: removed overflow-hidden to stop clipping ── */
   const LogoImage = ({ width, height }: { width: number; height: number }) => (
     <div
-      className="relative overflow-hidden shrink-0"
+      className="relative shrink-0" // ← شيلنا overflow-hidden
       style={{ width, height }}
     >
       <Image
@@ -49,8 +45,7 @@ export default function Navbar() {
         fill
         className="object-contain"
         style={{
-          /* scale up to fill, then shift DOWN so top isn't clipped */
-          transform: "scale(2.8) translateY(8%)",
+          transform: "scale(2.8) translateY(12%)", // ← زودنا translateY من 8% لـ 12%
           transformOrigin: "center center",
         }}
         priority
@@ -183,7 +178,6 @@ export default function Navbar() {
             transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
             className="fixed inset-0 z-40 bg-black flex flex-col items-start justify-end px-8 pb-16"
           >
-            {/* bg watermark */}
             <span
               className="absolute top-24 right-6 text-[100px] text-white/[0.03] leading-none select-none"
               style={{ fontFamily: "var(--font-bebas)" }}
@@ -191,7 +185,6 @@ export default function Navbar() {
               MENU
             </span>
 
-            {/* Logo in mobile menu header */}
             <div
               className="absolute top-0 left-0 right-0 h-[64px] flex items-center px-8"
               style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}
@@ -199,7 +192,6 @@ export default function Navbar() {
               <LogoImage width={140} height={46} />
             </div>
 
-            {/* Nav links */}
             <div className="flex flex-col gap-1 mb-10 mt-4">
               {navLinks.map((link, i) => (
                 <motion.a
@@ -221,7 +213,6 @@ export default function Navbar() {
               ))}
             </div>
 
-            {/* Book CTA */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
