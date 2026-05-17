@@ -119,7 +119,7 @@ const socialLinks = [
 const contactItems = [
   { label: "Email", value: "midoosauk@gmail.com" },
   { label: "Phone", value: "+201227957008" },
-  { label: "Based in", value: "Tanta, Egypt" },
+  { label: "Based in", value: "Cairo, Egypt" },
   { label: "Available", value: "Worldwide" },
 ];
 
@@ -172,7 +172,7 @@ export default function Footer() {
               className="text-[15px] text-white/30 leading-relaxed max-w-[280px]"
               style={{ fontFamily: "var(--font-barlow)" }}
             >
-              Professional videography. Based in Tanta — available worldwide.
+              Professional videography. Based in Cairo — available worldwide.
             </motion.p>
           </div>
 
@@ -315,7 +315,7 @@ export default function Footer() {
               className="text-[11px] tracking-[0.3em] text-white/20"
               style={{ fontFamily: "var(--font-condensed)" }}
             >
-              Tanta, Egypt
+              Cairo, Egypt
             </p>
           </div>
           <p

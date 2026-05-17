@@ -275,7 +275,7 @@ export default function ContactPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           access_key: process.env.NEXT_PUBLIC_WEB3FORMS_KEY,
-          to_email: "andrewaymanstore@gmail.com",
+          to_email: "midoosauk@gmail.com",
           subject: `[RED EDE] ${form.subject} — ${form.name}`,
           from_name: form.name,
           reply_to: form.email,
@@ -509,7 +509,10 @@ export default function ContactPage() {
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {/* Q3 */}
-                        <QuizBlock number={3} label="حصل حاجة ضايقتك قبل كده؟">
+                        <QuizBlock
+                          number={3}
+                          label="حصل حاجة ضايقتك قبل كده فى التصوير؟"
+                        >
                           <div className="flex flex-col gap-3">
                             <div className="flex flex-wrap gap-2">
                               <QuizOption

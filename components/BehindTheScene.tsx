@@ -225,7 +225,7 @@ export default function BehindTheScene() {
                 }}
               >
                 From concept development to final delivery, I work closely with
-                clients to bring their vision to life. Based in Tanta, working
+                clients to bring their vision to life. Based in Cairo, working
                 worldwide.
               </p>
             </div>
