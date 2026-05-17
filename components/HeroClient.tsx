@@ -11,7 +11,7 @@ import { useState, useEffect, useRef } from "react";
 
 const TAGLINE = "Your Vision. My Lens.";
 
-// Rotating photography quotes
+// Rotating videography quotes
 const ROTATING_QUOTES = [
   "Capturing moments that last forever.",
   "Every picture tells a thousand stories.",
@@ -20,7 +20,7 @@ const ROTATING_QUOTES = [
   "Your story, beautifully framed.",
   "The art of seeing the unseen.",
   "Creating memories you can feel.",
-  "Photography is the poetry of life.",
+  "videography is the poetry of life.",
 ];
 
 const LENS_RINGS = [

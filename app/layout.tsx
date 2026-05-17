@@ -24,7 +24,7 @@ const barlowCondensed = Barlow_Condensed({
 
 export const metadata: Metadata = {
   title: "Ahmed Portfolio",
-  description: "Professional photography, Portraits, Fashion & Commercial",
+  description: "Professional videography, Portraits, Commercial",
 };
 
 export default function RootLayout({

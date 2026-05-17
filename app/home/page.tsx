@@ -8,10 +8,10 @@ import HeroClient from "@/components/HeroClient";
 import Testimonials from "@/components/Testimonials";
 import Footer from "@/components/Footer";
 import BehindTheScene from "@/components/BehindTheScene";
+import FeedbackPage from "@/components/FeedBack";
 
 const SERVICES = [
   "Portraits",
-  "Fashion",
   "Commercial",
   "Events",
   "Editorial",
@@ -39,6 +39,12 @@ const CATEGORIES = [
     id: "Product",
     label: "Product",
     img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=130&fit=crop&auto=format",
+  },
+  // ── Factories ── حاطينه بين Product و Others
+  {
+    id: "Factories",
+    label: "Factories",
+    img: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=200&h=130&fit=crop&auto=format",
   },
   {
     id: "Others",
@@ -130,7 +136,7 @@ const VIDEOS: Record<string, Video[]> = {
       client: "اسم الكلايينت",
       year: "2024",
       desc: "وصف قصير",
-      youtubeId: "8fDLfnejzYc",
+      youtubeId: "C82MH7p-LEs",
     },
     {
       id: "p-3",
@@ -138,7 +144,7 @@ const VIDEOS: Record<string, Video[]> = {
       client: "اسم الكلايينت",
       year: "2024",
       desc: "وصف قصير",
-      youtubeId: "C82MH7p-LEs",
+      youtubeId: "1P25FEcsnDI",
     },
     {
       id: "p-4",
@@ -146,7 +152,7 @@ const VIDEOS: Record<string, Video[]> = {
       client: "اسم الكلايينت",
       year: "2024",
       desc: "وصف قصير",
-      youtubeId: "sn5npOsIaZI",
+      youtubeId: "D0aUmM1WY38",
     },
   ],
   Gym: [
@@ -172,7 +178,7 @@ const VIDEOS: Record<string, Video[]> = {
       client: "اسم الكلايينت",
       year: "2024",
       desc: "وصف قصير",
-      youtubeId: "lT8aWJv5nrw",
+      youtubeId: "sRXwLa2Nzy4",
     },
     {
       id: "g-4",
@@ -180,7 +186,7 @@ const VIDEOS: Record<string, Video[]> = {
       client: "اسم الكلايينت",
       year: "2024",
       desc: "وصف قصير",
-      youtubeId: "sRXwLa2Nzy4",
+      youtubeId: "lCd8rfAhNSE",
     },
     {
       id: "g-5",
@@ -188,7 +194,7 @@ const VIDEOS: Record<string, Video[]> = {
       client: "اسم الكلايينت",
       year: "2024",
       desc: "وصف قصير",
-      youtubeId: "lCd8rfAhNSE",
+      youtubeId: "cZPnUuwIVY0",
     },
     {
       id: "g-6",
@@ -196,7 +202,7 @@ const VIDEOS: Record<string, Video[]> = {
       client: "اسم الكلايينت",
       year: "2024",
       desc: "وصف قصير",
-      youtubeId: "cZPnUuwIVY0",
+      youtubeId: "NSnnOgu5nag",
     },
     {
       id: "g-7",
@@ -204,7 +210,7 @@ const VIDEOS: Record<string, Video[]> = {
       client: "اسم الكلايينت",
       year: "2024",
       desc: "وصف قصير",
-      youtubeId: "NSnnOgu5nag",
+      youtubeId: "UA35QjDNoKA",
     },
     {
       id: "g-8",
@@ -212,7 +218,7 @@ const VIDEOS: Record<string, Video[]> = {
       client: "اسم الكلايينت",
       year: "2024",
       desc: "وصف قصير",
-      youtubeId: "UA35QjDNoKA",
+      youtubeId: "iXt9V1La8R8",
     },
     {
       id: "g-9",
@@ -220,7 +226,7 @@ const VIDEOS: Record<string, Video[]> = {
       client: "اسم الكلايينت",
       year: "2024",
       desc: "وصف قصير",
-      youtubeId: "iXt9V1La8R8",
+      youtubeId: "moutE0G4nv0",
     },
     {
       id: "g-10",
@@ -228,7 +234,15 @@ const VIDEOS: Record<string, Video[]> = {
       client: "اسم الكلايينت",
       year: "2024",
       desc: "وصف قصير",
-      youtubeId: "moutE0G4nv0",
+      youtubeId: "58uUTJSYUwM",
+    },
+    {
+      id: "g-11",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "Uuq85cumWTk",
     },
   ],
   Product: [
@@ -265,6 +279,25 @@ const VIDEOS: Record<string, Video[]> = {
       youtubeId: "U8tN9RXwknU",
     },
   ],
+  // ── Factories — فاضية جاهزة تحط فيها اللينكات ──
+  Factories: [
+    {
+      id: "f-1",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "mea7sJQamng",
+    },
+    {
+      id: "f-2",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "eCBYkWAvUZM",
+    },
+  ],
   Others: [
     {
       id: "o-1",
@@ -290,9 +323,34 @@ const VIDEOS: Record<string, Video[]> = {
       desc: "وصف قصير",
       youtubeId: "CQbg3Op1TAE",
     },
+    {
+      id: "o-4",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "768I2xacnO4",
+    },
+    {
+      id: "o-5",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "JjedbIPEKq8",
+    },
+    {
+      id: "o-6",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "QKSJ_CBgjhc",
+    },
   ],
 };
 
+/* ─── Video Modal ─────────────────────────────────────────────── */
 function VideoModal({ video, onClose }: { video: Video; onClose: () => void }) {
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -341,6 +399,7 @@ function VideoModal({ video, onClose }: { video: Video; onClose: () => void }) {
   );
 }
 
+/* ─── Video Card ──────────────────────────────────────────────── */
 function VideoCard({ video, onPlay }: { video: Video; onPlay: () => void }) {
   const [hovered, setHovered] = useState(false);
   const thumb = `https://img.youtube.com/vi/${video.youtubeId}/maxresdefault.jpg`;
@@ -385,29 +444,23 @@ function VideoCard({ video, onPlay }: { video: Video; onPlay: () => void }) {
   );
 }
 
+/* ─── Work Section ────────────────────────────────────────────── */
 function WorkSection() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [activeVideo, setActiveVideo] = useState<Video | null>(null);
   const videos = activeCategory ? (VIDEOS[activeCategory] ?? []) : [];
-
-  // Ref for the videos container to scroll to
   const videosContainerRef = useRef<HTMLDivElement>(null);
 
-  // Function to handle category click with scroll
   const handleCategoryClick = (categoryId: string, isActive: boolean) => {
-    const newActiveState = isActive ? null : categoryId;
-    setActiveCategory(newActiveState);
-
-    // If opening a category (not closing), scroll to videos after a small delay
+    const next = isActive ? null : categoryId;
+    setActiveCategory(next);
     if (!isActive) {
       setTimeout(() => {
-        if (videosContainerRef.current) {
-          videosContainerRef.current.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
-        }
-      }, 100); // Small delay to allow the animation to start
+        videosContainerRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 100);
     }
   };
 
@@ -503,7 +556,7 @@ function WorkSection() {
       </div>
 
       <AnimatePresence mode="wait">
-        {activeCategory && videos.length > 0 && (
+        {activeCategory && (
           <motion.div
             key={activeCategory}
             ref={videosContainerRef}
@@ -524,15 +577,33 @@ function WorkSection() {
                 </span>
                 <div className="h-px flex-1 bg-white/[0.06]" />
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {videos.map((v) => (
-                  <VideoCard
-                    key={v.id}
-                    video={v}
-                    onPlay={() => setActiveVideo(v)}
-                  />
-                ))}
-              </div>
+
+              {videos.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {videos.map((v) => (
+                    <VideoCard
+                      key={v.id}
+                      video={v}
+                      onPlay={() => setActiveVideo(v)}
+                    />
+                  ))}
+                </div>
+              ) : (
+                /* placeholder لما Factories فاضية */
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="flex flex-col items-center justify-center py-20 gap-4"
+                >
+                  <span className="text-4xl text-red-600/30">⬡</span>
+                  <p
+                    className="text-[11px] tracking-[0.5em] uppercase text-white/20"
+                    style={{ fontFamily: "var(--font-condensed)" }}
+                  >
+                    Coming Soon
+                  </p>
+                </motion.div>
+              )}
             </div>
           </motion.div>
         )}
@@ -545,26 +616,22 @@ function WorkSection() {
   );
 }
 
+/* ─── Cursor ──────────────────────────────────────────────────── */
 function useCursor() {
   const [dot, setDot] = useState({ x: -100, y: -100 });
   const [ring, setRing] = useState({ x: -100, y: -100 });
-
   useEffect(() => {
     function onMove(e: MouseEvent) {
       setDot({ x: e.clientX, y: e.clientY });
-      setTimeout(function () {
-        setRing({ x: e.clientX, y: e.clientY });
-      }, 80);
+      setTimeout(() => setRing({ x: e.clientX, y: e.clientY }), 80);
     }
     window.addEventListener("mousemove", onMove);
-    return function () {
-      window.removeEventListener("mousemove", onMove);
-    };
+    return () => window.removeEventListener("mousemove", onMove);
   }, []);
-
   return { dot, ring };
 }
 
+/* ─── Services Ticker ─────────────────────────────────────────── */
 function ServicesTicker() {
   return (
     <div style={{ background: "#CC0000", padding: "3px 0" }}>
@@ -600,6 +667,7 @@ function ServicesTicker() {
   );
 }
 
+/* ─── CTA ─────────────────────────────────────────────────────── */
 function CTASection() {
   return (
     <section
@@ -678,6 +746,7 @@ function CTASection() {
   );
 }
 
+/* ─── Page ────────────────────────────────────────────────────── */
 export default function HomePage() {
   const { dot, ring } = useCursor();
 
@@ -696,12 +765,12 @@ export default function HomePage() {
       <div className="cursor-ring" style={{ left: ring.x, top: ring.y }} />
       <Navbar />
       <HeroClient />
-
       <WorkSection />
       <section>
         <Testimonials />
       </section>
       <CTASection />
+      <FeedbackPage />
       <BehindTheScene />
       <Footer />
     </main>

@@ -9,7 +9,7 @@ const PHOTOGRAPHER_IMAGES = [
   {
     id: 1,
     src: "/images/4.jpg",
-    alt: "Photographer at work - portrait session",
+    alt: "Videographer at work - portrait session",
     caption: "Capturing the moment",
   },
   {
@@ -175,7 +175,7 @@ export default function BehindTheScene() {
           </p>
         </motion.div>
 
-        {/* Main Content - Photographer Section + Text */}
+        {/* Main Content - Videographer Section + Text */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-20">
           {/* Left side - Text content */}
           <motion.div
@@ -192,7 +192,7 @@ export default function BehindTheScene() {
                   className="text-red-500 text-sm tracking-[0.3em] uppercase"
                   style={{ fontFamily: "var(--font-condensed)" }}
                 >
-                  The Photographer
+                  The Videographer
                 </span>
               </div>
               <h3
@@ -212,10 +212,10 @@ export default function BehindTheScene() {
                   fontSize: "clamp(14px, 1.8vw, 16px)",
                 }}
               >
-                With over 8 years of experience in fashion, commercial, and
-                editorial photography, I believe that every frame should evoke
-                emotion. My approach blends technical precision with artistic
-                intuition — creating visuals that resonate.
+                With over 4 years of experience in editorial videography, I
+                believe that every frame should evoke emotion. My approach
+                blends technical precision with artistic intuition — creating
+                visuals that resonate.
               </p>
               <p
                 className="text-white/40 leading-relaxed"
@@ -225,7 +225,7 @@ export default function BehindTheScene() {
                 }}
               >
                 From concept development to final delivery, I work closely with
-                clients to bring their vision to life. Based in Cairo, working
+                clients to bring their vision to life. Based in Tanta, working
                 worldwide.
               </p>
             </div>
@@ -235,7 +235,7 @@ export default function BehindTheScene() {
               {[
                 { label: "Years Exp", value: "4+" },
                 { label: "Projects", value: "50+" },
-                { label: "Clients", value: "40+" },
+                { label: "Clients", value: "30+" },
               ].map((stat) => (
                 <div key={stat.label} className="text-center">
                   <p
@@ -393,7 +393,7 @@ export default function BehindTheScene() {
               fontSize: "clamp(14px, 2vw, 18px)",
             }}
           >
-            {`"Photography is the art of revealing what's already there — the beauty, the emotion, the story waiting to be told."`}
+            {`"videography is the art of revealing what's already there — the beauty, the emotion, the story waiting to be told."`}
           </p>
           <p
             className="text-red-600/50 text-xs tracking-[0.3em] uppercase mt-4"

@@ -68,9 +68,20 @@ const icons: Record<string, React.ReactNode> = {
       <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.19 8.19 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z" />
     </svg>
   ),
-  Behance: (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M7.5 11.5c1.38 0 2.5-.56 2.5-2S8.88 8 7.5 8H4v3.5h3.5zm.25 4.5c1.5 0 2.75-.65 2.75-2.25S9.25 12 7.75 12H4V16h3.75zM2 6h7a4 4 0 0 1 4 4 3.5 3.5 0 0 1-1.5 2.9A3.75 3.75 0 0 1 13 16.5C13 19 11.5 20 9 20H2V6zm13.5 3.5h5.5v-1h-5.5v1zm-.5 4a3 3 0 0 0 3 2.5 2.8 2.8 0 0 0 2.5-1.5H22a4.5 4.5 0 0 1-4 2.5A4.5 4.5 0 0 1 13.5 12a4.5 4.5 0 0 1 4.5-4.5A4.3 4.3 0 0 1 22 12v1.5H15zm.5-1.5h4c-.25-1.25-1-2-2-2s-1.75.75-2 2z" />
+  Canva: (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    >
+      <path
+        d="M17 12a5 5 0 1 1-5-5c1.5 0 2.8.6 3.8 1.6"
+        strokeLinecap="round"
+        fill="none"
+      />
     </svg>
   ),
 };
@@ -93,14 +104,22 @@ const socialLinks = [
     href: "https://www.facebook.com/share/1B6nUTQGwi/?mibextid=wwXIfr",
     handle: "/ahmedosama",
   },
-  { label: "TikTok", href: "#", handle: "@ahmedosama" },
-  { label: "Behance", href: "#", handle: "/ahmedosama" },
+  {
+    label: "TikTok",
+    href: "https://www.tiktok.com/@ahmedosamaa999?_r=1&_t=ZS-96RH3wu22q4",
+    handle: "@ahmedosama",
+  },
+  {
+    label: "Canva",
+    href: "https://canva.link/vft5xt6wbdf3k0r",
+    handle: "/ahmedosama",
+  },
 ];
 
 const contactItems = [
   { label: "Email", value: "midoosauk@gmail.com" },
   { label: "Phone", value: "+201227957008" },
-  { label: "Based in", value: "Cairo, Egypt" },
+  { label: "Based in", value: "Tanta, Egypt" },
   { label: "Available", value: "Worldwide" },
 ];
 
@@ -153,8 +172,7 @@ export default function Footer() {
               className="text-[15px] text-white/30 leading-relaxed max-w-[280px]"
               style={{ fontFamily: "var(--font-barlow)" }}
             >
-              Professional photography for portraits, fashion & commercial.
-              Based in Cairo — available worldwide.
+              Professional videography. Based in Tanta — available worldwide.
             </motion.p>
           </div>
 
@@ -297,7 +315,7 @@ export default function Footer() {
               className="text-[11px] tracking-[0.3em] text-white/20"
               style={{ fontFamily: "var(--font-condensed)" }}
             >
-              Cairo, Egypt
+              Tanta, Egypt
             </p>
           </div>
           <p

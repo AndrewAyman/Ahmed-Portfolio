@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { motion, AnimatePresence, useInView, Variants } from "framer-motion"; // تأكد من إضافة Variants هنا
 import { toast } from "react-toastify";
 
-const services = ["Wedding", "Portrait", "Fashion", "Commercial", "Other"];
+const services = ["Portrait", "Videography", "Other"];
 
 // تعريف النوع هنا يحل مشكلة الـ Build تماماً
 const fadeUp: Variants = {
@@ -22,11 +22,18 @@ export default function BookingForm() {
   const [loading, setLoading] = useState(false);
   const [focused, setFocused] = useState<string | null>(null);
   const [form, setForm] = useState({
-    name: "", email: "", phone: "", service: "", date: "", message: "",
+    name: "",
+    email: "",
+    phone: "",
+    service: "",
+    date: "",
+    message: "",
   });
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -45,8 +52,17 @@ export default function BookingForm() {
       });
       const data = await res.json();
       if (data.success) {
-       toast.success("Sent! We'll be in touch within 24 hours.", { icon: <span>📷</span> });
-        setForm({ name: "", email: "", phone: "", service: "", date: "", message: "" });
+        toast.success("Sent! We'll be in touch within 24 hours.", {
+          icon: <span>📷</span>,
+        });
+        setForm({
+          name: "",
+          email: "",
+          phone: "",
+          service: "",
+          date: "",
+          message: "",
+        });
       } else throw new Error();
     } catch {
       toast.error("Something went wrong. Please try again.");
@@ -56,9 +72,17 @@ export default function BookingForm() {
   };
 
   const Field = ({
-    index, label, required, children, name,
+    index,
+    label,
+    required,
+    children,
+    name,
   }: {
-    index: number; label: string; required?: boolean; children: React.ReactNode; name: string;
+    index: number;
+    label: string;
+    required?: boolean;
+    children: React.ReactNode;
+    name: string;
   }) => (
     <motion.div
       custom={index}
@@ -67,10 +91,14 @@ export default function BookingForm() {
       animate={inView ? "show" : "hidden"}
       className="relative"
     >
-      <label className="block font-condensed text-[10px] tracking-[0.5em] uppercase mb-2 transition-colors duration-300"
-        style={{ color: focused === name ? "#CC0000" : "rgba(255,255,255,0.25)" }}
+      <label
+        className="block font-condensed text-[10px] tracking-[0.5em] uppercase mb-2 transition-colors duration-300"
+        style={{
+          color: focused === name ? "#CC0000" : "rgba(255,255,255,0.25)",
+        }}
       >
-        {label}{required && <span className="text-red ml-1">*</span>}
+        {label}
+        {required && <span className="text-red ml-1">*</span>}
       </label>
       {children}
       {/* animated bottom border */}
@@ -116,7 +144,6 @@ export default function BookingForm() {
       />
 
       <div className="max-w-6xl mx-auto px-10 md:px-20 grid grid-cols-1 md:grid-cols-[1fr_1.1fr] gap-20 items-start">
-
         {/* ── Left col ── */}
         <div>
           <motion.div
@@ -138,7 +165,13 @@ export default function BookingForm() {
             </div>
 
             {/* headline */}
-            <h1 className="font-bebas leading-none mb-10" style={{ fontSize: "clamp(64px, 9vw, 104px)", letterSpacing: "0.04em" }}>
+            <h1
+              className="font-bebas leading-none mb-10"
+              style={{
+                fontSize: "clamp(64px, 9vw, 104px)",
+                letterSpacing: "0.04em",
+              }}
+            >
               <motion.span
                 className="block text-white"
                 initial={{ opacity: 0, y: 30 }}
@@ -163,15 +196,15 @@ export default function BookingForm() {
               animate={inView ? { opacity: 1 } : {}}
               transition={{ duration: 0.7, delay: 0.35 }}
             >
-              Ready to capture something extraordinary? Fill in the form and we'll
-              be in touch within 24 hours.
+              Ready to capture something extraordinary? Fill in the form and
+              we'll be in touch within 24 hours.
             </motion.p>
 
             {/* contact rows */}
             {[
-              { label: "Email",     value: "hello@redede.com" },
-              { label: "Phone",     value: "+20 100 000 0000" },
-              { label: "Based in",  value: "Cairo, Egypt" },
+              { label: "Email", value: "hello@redede.com" },
+              { label: "Phone", value: "+20 100 000 0000" },
+              { label: "Based in", value: "Cairo, Egypt" },
               { label: "Available", value: "Worldwide" },
             ].map((item, i) => (
               <motion.div
@@ -185,7 +218,9 @@ export default function BookingForm() {
                 <span className="font-condensed text-[10px] tracking-[0.4em] text-red/60 uppercase w-20 shrink-0">
                   {item.label}
                 </span>
-                <span className="font-barlow text-sm text-white/40">{item.value}</span>
+                <span className="font-barlow text-sm text-white/40">
+                  {item.value}
+                </span>
               </motion.div>
             ))}
           </motion.div>
@@ -202,9 +237,14 @@ export default function BookingForm() {
           {/* Name */}
           <Field index={0} label="Full Name" required name="name">
             <input
-              type="text" name="name" value={form.name} onChange={handleChange}
-              required placeholder="Your full name"
-              onFocus={() => setFocused("name")} onBlur={() => setFocused(null)}
+              type="text"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              required
+              placeholder="Your full name"
+              onFocus={() => setFocused("name")}
+              onBlur={() => setFocused(null)}
               style={{ ...inputStyle, color: "#fff" }}
               className="placeholder:text-white/15"
             />
@@ -214,18 +254,29 @@ export default function BookingForm() {
           <div className="grid grid-cols-2 gap-8">
             <Field index={1} label="Email" required name="email">
               <input
-                type="email" name="email" value={form.email} onChange={handleChange}
-                required placeholder="your@email.com"
-                onFocus={() => setFocused("email")} onBlur={() => setFocused(null)}
-                style={inputStyle} className="placeholder:text-white/15"
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                required
+                placeholder="your@email.com"
+                onFocus={() => setFocused("email")}
+                onBlur={() => setFocused(null)}
+                style={inputStyle}
+                className="placeholder:text-white/15"
               />
             </Field>
             <Field index={2} label="Phone" name="phone">
               <input
-                type="tel" name="phone" value={form.phone} onChange={handleChange}
+                type="tel"
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
                 placeholder="+20 ..."
-                onFocus={() => setFocused("phone")} onBlur={() => setFocused(null)}
-                style={inputStyle} className="placeholder:text-white/15"
+                onFocus={() => setFocused("phone")}
+                onBlur={() => setFocused(null)}
+                style={inputStyle}
+                className="placeholder:text-white/15"
               />
             </Field>
           </div>
@@ -233,14 +284,22 @@ export default function BookingForm() {
           {/* Service */}
           <Field index={3} label="Service" required name="service">
             <select
-              name="service" value={form.service} onChange={handleChange} required
-              onFocus={() => setFocused("service")} onBlur={() => setFocused(null)}
+              name="service"
+              value={form.service}
+              onChange={handleChange}
+              required
+              onFocus={() => setFocused("service")}
+              onBlur={() => setFocused(null)}
               style={{ ...inputStyle, appearance: "none" as const }}
               className="placeholder:text-white/15"
             >
-              <option value="" disabled style={{ background: "#0A0A0A" }}>Select service type</option>
+              <option value="" disabled style={{ background: "#0A0A0A" }}>
+                Select service type
+              </option>
               {services.map((s) => (
-                <option key={s} value={s} style={{ background: "#141414" }}>{s}</option>
+                <option key={s} value={s} style={{ background: "#141414" }}>
+                  {s}
+                </option>
               ))}
             </select>
           </Field>
@@ -248,8 +307,12 @@ export default function BookingForm() {
           {/* Date */}
           <Field index={4} label="Preferred Date" name="date">
             <input
-              type="date" name="date" value={form.date} onChange={handleChange}
-              onFocus={() => setFocused("date")} onBlur={() => setFocused(null)}
+              type="date"
+              name="date"
+              value={form.date}
+              onChange={handleChange}
+              onFocus={() => setFocused("date")}
+              onBlur={() => setFocused(null)}
               style={inputStyle}
               className="[color-scheme:dark]"
             />
@@ -258,10 +321,14 @@ export default function BookingForm() {
           {/* Message */}
           <Field index={5} label="Your Vision" required name="message">
             <textarea
-              name="message" value={form.message} onChange={handleChange}
-              required rows={4}
+              name="message"
+              value={form.message}
+              onChange={handleChange}
+              required
+              rows={4}
               placeholder="Describe your ideal session..."
-              onFocus={() => setFocused("message")} onBlur={() => setFocused(null)}
+              onFocus={() => setFocused("message")}
+              onBlur={() => setFocused(null)}
               style={{ ...inputStyle, resize: "none" }}
               className="placeholder:text-white/15"
             />
@@ -304,7 +371,11 @@ export default function BookingForm() {
                     <motion.span
                       className="w-4 h-4 border border-red/40 border-t-red rounded-full"
                       animate={{ rotate: 360 }}
-                      transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+                      transition={{
+                        duration: 0.8,
+                        repeat: Infinity,
+                        ease: "linear",
+                      }}
                     />
                     Sending
                   </motion.span>

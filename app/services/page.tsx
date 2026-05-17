@@ -329,8 +329,8 @@ function ServicesHero() {
 function StatsBar() {
   const stats = [
     { value: "5", label: "Core Services" },
-    { value: "3+", label: "Years Active" },
-    { value: "200+", label: "Projects Done" },
+    { value: "4+", label: "Years Active" },
+    { value: "50+", label: "Projects Done" },
     { value: "∞", label: "Creative Drive" },
   ];
 
@@ -491,8 +491,8 @@ function FeaturedShooting() {
               color: "rgba(255,255,255,0.40)",
             }}
           >
-            End-to-end shooting services covering photography and video, focused
-            on clean execution, strong visuals, and impactful storytelling.
+            End-to-end shooting services covering videography focused on clean
+            execution, strong visuals, and impactful storytelling.
           </motion.p>
 
           <motion.div
@@ -503,11 +503,9 @@ function FeaturedShooting() {
             className="flex flex-wrap gap-3"
           >
             {[
-              "Photography",
-              "Video",
+              "videography",
               "Storytelling",
               "Full Production",
-              "Art Direction",
               "Post-Production",
             ].map((tag) => (
               <span

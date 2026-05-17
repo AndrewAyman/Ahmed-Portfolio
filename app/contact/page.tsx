@@ -5,6 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
+/* ─── Arabic text detector ──────────────────────────────────── */
+const isArabic = (text: string) => /[\u0600-\u06FF]/.test(text);
+const arabicSafe = (text: string): React.CSSProperties =>
+  isArabic(text) ? { letterSpacing: "0", direction: "rtl" } : {};
+
 /* ─── Field ─────────────────────────────────────────────────── */
 function Field({
   label,
@@ -37,9 +42,7 @@ function Field({
         )}
       </label>
       {children}
-      {/* base line */}
       <div className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-white/40" />
-      {/* animated active line */}
       <motion.div
         className="absolute bottom-0 left-0 h-[2px] bg-red"
         animate={{ width: focused === name ? "100%" : "0%" }}
@@ -61,25 +64,30 @@ function QuizOption({
   selected: boolean;
   onClick: () => void;
 }) {
+  const arabic = isArabic(label);
+
   return (
     <motion.button
       type="button"
       onClick={onClick}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.97 }}
-      className="flex items-center gap-3 px-5 py-3.5 font-condensed text-[12px] tracking-[0.3em] uppercase transition-all duration-300 border text-left font-semibold"
+      className="flex items-center gap-3 px-5 py-4 font-condensed uppercase transition-all duration-300 border text-left font-semibold"
       style={{
         borderColor: selected ? "#FF1A1A" : "rgba(255,255,255,0.28)",
         color: selected ? "#fff" : "rgba(255,255,255,0.7)",
         background: selected ? "rgba(204,0,0,0.14)" : "rgba(255,255,255,0.03)",
+        /* ── FIX: Arabic gets zero letter-spacing ── */
+        letterSpacing: arabic ? "0" : "0.25em",
+        direction: arabic ? "rtl" : "ltr",
+        fontFamily: arabic ? "var(--font-barlow)" : undefined,
+        fontSize: arabic ? "16px" : "13px", // ← كبّرنا من 12px
       }}
     >
       {icon && (
         <span
-          className="text-base transition-all duration-300"
-          style={{
-            color: selected ? "#FF1A1A" : "rgba(255,255,255,0.4)",
-          }}
+          className="text-lg transition-all duration-300"
+          style={{ color: selected ? "#FF1A1A" : "rgba(255,255,255,0.4)" }}
         >
           {icon}
         </span>
@@ -89,7 +97,7 @@ function QuizOption({
         <motion.span
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="ml-auto text-xs"
+          className="ml-auto text-sm"
           style={{ color: "#CC0000" }}
         >
           ✓
@@ -111,6 +119,8 @@ function QuizBlock({
   sublabel?: string;
   children: React.ReactNode;
 }) {
+  const arabic = isArabic(label);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -124,7 +134,7 @@ function QuizBlock({
     >
       <div className="flex items-center gap-3 flex-wrap">
         <span
-          className="font-bebas flex items-center justify-center w-6 h-6 rounded-full shrink-0 text-[12px] font-bold"
+          className="font-bebas flex items-center justify-center w-7 h-7 rounded-full shrink-0 text-[13px] font-bold"
           style={{
             border: "1.5px solid rgba(255,26,26,0.7)",
             color: "#FF1A1A",
@@ -134,15 +144,24 @@ function QuizBlock({
           {number}
         </span>
         <span
-          className="font-condensed text-[13px] tracking-[0.45em] uppercase font-semibold"
-          style={{ color: "rgba(255,255,255,0.85)" }}
+          className="font-condensed uppercase font-semibold"
+          style={{
+            color: "rgba(255,255,255,0.85)",
+            /* ── FIX: Arabic gets zero letter-spacing ── */
+            letterSpacing: arabic ? "0" : "0.4em",
+            fontFamily: arabic ? "var(--font-barlow)" : undefined,
+            fontSize: arabic ? "17px" : "15px", // ← كبّرنا من 13px
+          }}
         >
           {label}
         </span>
         {sublabel && (
           <span
-            className="font-barlow text-xs normal-case tracking-normal font-medium"
-            style={{ color: "rgba(255,255,255,0.25)" }}
+            className="font-barlow text-sm normal-case tracking-normal font-medium"
+            style={{
+              color: "rgba(255,255,255,0.25)",
+              ...arabicSafe(sublabel),
+            }}
           >
             — {sublabel}
           </span>
@@ -152,13 +171,6 @@ function QuizBlock({
     </motion.div>
   );
 }
-
-const services = [
-  { id: "portrait", label: "Portrait", icon: "◉" },
-  { id: "fashion", label: "Fashion", icon: "✦" },
-  { id: "commercial", label: "Commercial", icon: "▲" },
-  { id: "other", label: "Other", icon: "●" },
-];
 
 const shootTypes = [
   { id: "ad", label: "إعلان", icon: "◈" },
@@ -244,7 +256,6 @@ export default function ContactPage() {
     phone: "",
     subject: "",
   });
-
   const [shootGoal, setShootGoal] = useState("");
   const [shootType, setShootType] = useState("");
   const [badExperience, setBadExperience] = useState<"yes" | "no" | "">("");
@@ -298,7 +309,6 @@ export default function ContactPage() {
   return (
     <>
       <Navbar />
-
       <div
         style={{
           background: `
@@ -315,7 +325,6 @@ export default function ContactPage() {
           style={{ background: "transparent" }}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-8 md:px-16 py-10">
-            {/* ── Section label ── */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -328,7 +337,6 @@ export default function ContactPage() {
               </span>
             </motion.div>
 
-            {/* ── Main grid ── */}
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-12 lg:gap-24 items-start">
               {/* ══ LEFT ══ */}
               <motion.div
@@ -354,9 +362,7 @@ export default function ContactPage() {
                     conversation.
                   </p>
                 </div>
-
                 <div className="h-px bg-white/20" />
-
                 <div>
                   {[
                     { label: "Phone", value: "+201227957008" },
@@ -381,7 +387,6 @@ export default function ContactPage() {
               {/* ══ RIGHT ══ */}
               <AnimatePresence mode="wait">
                 {sent ? (
-                  /* ── Success state ── */
                   <motion.div
                     key="success"
                     initial={{ opacity: 0, scale: 0.95 }}
@@ -431,11 +436,8 @@ export default function ContactPage() {
                     transition={{ duration: 0.6, delay: 0.15 }}
                     className="flex flex-col gap-0"
                   >
-                    {/* ══════════════════════════════════════════
-                      QUIZ SECTION — always visible, above form
-                  ══════════════════════════════════════════ */}
+                    {/* ── QUIZ ── */}
                     <div className="flex flex-col gap-8 pb-12">
-                      {/* Quiz header */}
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -464,9 +466,8 @@ export default function ContactPage() {
                         />
                       </motion.div>
 
-                      {/* Q1 + Q2 — two columns on md+ */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {/* Q1 ── هدفك ايه من التصوير؟ */}
+                        {/* Q1 */}
                         <QuizBlock number={1} label="هدفك ايه من التصوير؟">
                           <div className="relative pb-px">
                             <textarea
@@ -477,7 +478,7 @@ export default function ContactPage() {
                               onFocus={() => setFocused("shootGoal")}
                               onBlur={() => setFocused(null)}
                               className={`${inputCls} resize-none text-sm placeholder:text-sm`}
-                              style={{ direction: "rtl" }}
+                              style={{ direction: "rtl", letterSpacing: "0" }}
                             />
                             <div className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-white/35" />
                             <motion.div
@@ -490,7 +491,7 @@ export default function ContactPage() {
                           </div>
                         </QuizBlock>
 
-                        {/* Q2 ── ايه نوع التصوير؟ */}
+                        {/* Q2 */}
                         <QuizBlock number={2} label="ايه نوع التصوير؟">
                           <div className="flex flex-wrap gap-2">
                             {shootTypes.map((t) => (
@@ -506,9 +507,8 @@ export default function ContactPage() {
                         </QuizBlock>
                       </div>
 
-                      {/* Q3 + Q4 — two columns on md+ */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {/* Q3 ── تجربة سيئة قبل كده؟ */}
+                        {/* Q3 */}
                         <QuizBlock number={3} label="حصل حاجة ضايقتك قبل كده؟">
                           <div className="flex flex-col gap-3">
                             <div className="flex flex-wrap gap-2">
@@ -545,7 +545,10 @@ export default function ContactPage() {
                                       onFocus={() => setFocused("badExp")}
                                       onBlur={() => setFocused(null)}
                                       className={`${inputCls} resize-none text-sm placeholder:text-sm`}
-                                      style={{ direction: "rtl" }}
+                                      style={{
+                                        direction: "rtl",
+                                        letterSpacing: "0",
+                                      }}
                                     />
                                     <div className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-white/35" />
                                     <motion.div
@@ -566,7 +569,7 @@ export default function ContactPage() {
                           </div>
                         </QuizBlock>
 
-                        {/* Q4 ── عندك اسكريبت جاهز؟ */}
+                        {/* Q4 */}
                         <QuizBlock
                           number={4}
                           label="عندك اسكريبت جاهز؟"
@@ -590,11 +593,8 @@ export default function ContactPage() {
                       </div>
                     </div>
 
-                    {/* ══════════════════════════════════════════
-                      DIVIDER — فاصل بين الأسئلة والفورم
-                  ══════════════════════════════════════════ */}
+                    {/* ── DIVIDER ── */}
                     <div className="relative flex items-center gap-5 my-2 mb-12">
-                      {/* Left line */}
                       <div
                         className="flex-1 h-[1.5px]"
                         style={{
@@ -602,18 +602,12 @@ export default function ContactPage() {
                             "linear-gradient(to right, transparent, rgba(255,255,255,0.3), rgba(255,30,30,0.65))",
                         }}
                       />
-
-                      {/* Center ornament */}
-                      <div className="flex items-center gap-2 shrink-0">
-                        <span
-                          className="font-condensed text-[12px] tracking-[0.65em] uppercase font-semibold"
-                          style={{ color: "rgba(255,255,255,0.55)" }}
-                        >
-                          Your Details
-                        </span>
-                      </div>
-
-                      {/* Right line */}
+                      <span
+                        className="font-condensed text-[12px] tracking-[0.65em] uppercase font-semibold shrink-0"
+                        style={{ color: "rgba(255,255,255,0.55)" }}
+                      >
+                        Your Details
+                      </span>
                       <div
                         className="flex-1 h-[1.5px]"
                         style={{
@@ -623,14 +617,11 @@ export default function ContactPage() {
                       />
                     </div>
 
-                    {/* ══════════════════════════════════════════
-                      FORM — الاسم والبيانات تحت الأسئلة
-                  ══════════════════════════════════════════ */}
+                    {/* ── FORM ── */}
                     <form
                       onSubmit={handleSubmit}
                       className="flex flex-col gap-8"
                     >
-                      {/* Full Name */}
                       <Field
                         label="Full Name"
                         required
@@ -651,7 +642,6 @@ export default function ContactPage() {
                         />
                       </Field>
 
-                      {/* Email + Phone */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <Field
                           label="Email"
@@ -691,7 +681,6 @@ export default function ContactPage() {
                         </Field>
                       </div>
 
-                      {/* Subject */}
                       <Field
                         label="Subject"
                         required
@@ -712,7 +701,6 @@ export default function ContactPage() {
                         />
                       </Field>
 
-                      {/* Submit */}
                       <motion.button
                         type="submit"
                         disabled={loading}
@@ -781,7 +769,6 @@ export default function ContactPage() {
             </div>
           </div>
         </main>
-
         <WhatsAppSection />
       </div>
       <Footer />
