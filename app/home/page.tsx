@@ -154,6 +154,14 @@ const VIDEOS: Record<string, Video[]> = {
       desc: "وصف قصير",
       youtubeId: "D0aUmM1WY38",
     },
+    {
+      id: "p-5",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "DSGR5r2v-EM",
+    },
   ],
   Gym: [
     {
