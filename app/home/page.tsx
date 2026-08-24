@@ -36,6 +36,11 @@ const CATEGORIES = [
     img: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=200&h=130&fit=crop&auto=format",
   },
   {
+    id: "Food & Drinks",
+    label: "Food & Drinks",
+    img: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200&h=130&fit=crop&auto=format",
+  },
+  {
     id: "Product",
     label: "Product",
     img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=130&fit=crop&auto=format",
@@ -265,7 +270,7 @@ const VIDEOS: Record<string, Video[]> = {
       desc: "وصف قصير",
       youtubeId: "bNx6bzIx26A",
     },
-            {
+    {
       id: "g-13",
       title: "اسم الفيديو",
       client: "اسم الكلايينت",
@@ -273,6 +278,80 @@ const VIDEOS: Record<string, Video[]> = {
       desc: "وصف قصير",
       youtubeId: "NnoAYFEvRGQ",
     },
+     {
+      id: "g-14",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "GWB-i37wdBo",
+    },
+     {
+      id: "g-15",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "3D7eBEgLx08",
+    },
+     {
+      id: "g-16",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "WyMDwibU7ZM",
+    },
+     {
+      id: "g-17",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "n_o1XtZLryk",
+    },
+     {
+      id: "g-18",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "Mo5Apf1c8V0",
+    },
+  ],
+  "Food & Drinks": [
+    {
+      id: "fd-1",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "CdG4faWdW0g",
+    },
+    {
+      id: "fd-2",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "dGaDbUWORrA",
+    },
+    {
+      id: "fd-3",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "yucb2Op_7jU",
+    },
+    {
+      id: "fd-4",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "VOG4gSqCRBI",
+    }
   ],
   Product: [
     {
@@ -376,13 +455,21 @@ const VIDEOS: Record<string, Video[]> = {
       desc: "وصف قصير",
       youtubeId: "UipQRii9BwU",
     },
-                        {
+    {
       id: "f-7",
       title: "اسم الفيديو",
       client: "اسم الكلايينت",
       year: "2024",
       desc: "وصف قصير",
       youtubeId: "v4PfmFrR3T0",
+    },
+    {
+      id: "f-8",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "AQ6ULJb7rtA",
     },
   ],
   Others: [
@@ -434,7 +521,7 @@ const VIDEOS: Record<string, Video[]> = {
       desc: "وصف قصير",
       youtubeId: "QKSJ_CBgjhc",
     },
-                        {
+    {
       id: "o-7",
       title: "اسم الفيديو",
       client: "اسم الكلايينت",
@@ -442,7 +529,14 @@ const VIDEOS: Record<string, Video[]> = {
       desc: "وصف قصير",
       youtubeId: "4NxXotUl-9g",
     },
-    
+    {
+      id: "o-8",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "WyMDwibU7ZM",
+    },
   ],
 };
 
@@ -459,7 +553,7 @@ function VideoModal({ video, onClose }: { video: Video; onClose: () => void }) {
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-10"
+        className="z-50 fixed inset-0 flex justify-center items-center p-4 md:p-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -467,7 +561,7 @@ function VideoModal({ video, onClose }: { video: Video; onClose: () => void }) {
       >
         <div className="absolute inset-0 bg-black/90 backdrop-blur-sm" />
         <motion.div
-          className="relative w-full max-w-4xl z-10"
+          className="z-10 relative w-full max-w-4xl"
           initial={{ scale: 0.92, opacity: 0, y: 20 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.92, opacity: 0 }}
@@ -476,12 +570,12 @@ function VideoModal({ video, onClose }: { video: Video; onClose: () => void }) {
         >
           <button
             onClick={onClose}
-            className="absolute -top-10 right-0 text-white/50 hover:text-white transition-colors text-sm tracking-[0.3em] uppercase flex items-center gap-2"
+            className="-top-10 right-0 absolute flex items-center gap-2 text-white/50 hover:text-white text-sm uppercase tracking-[0.3em] transition-colors"
             style={{ fontFamily: "var(--font-condensed)" }}
           >
             Close ✕
           </button>
-          <div className="aspect-video w-full bg-black border border-white/10">
+          <div className="bg-black border border-white/10 w-full aspect-video">
             <iframe
               src={`https://www.youtube.com/embed/${video.youtubeId}?autoplay=1&rel=0`}
               allow="autoplay; fullscreen"
@@ -509,17 +603,17 @@ function VideoCard({ video, onPlay }: { video: Video; onPlay: () => void }) {
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
       onClick={onPlay}
-      className="relative cursor-pointer overflow-hidden"
+      className="relative overflow-hidden cursor-pointer"
       style={{ borderRadius: "2px" }}
     >
-      <div className="relative aspect-video overflow-hidden bg-white/5">
+      <div className="relative bg-white/5 aspect-video overflow-hidden">
         <img
           src={thumb}
           alt={video.title}
           className="w-full h-full object-cover"
         />
         <motion.div
-          className="absolute inset-0 flex items-center justify-center"
+          className="absolute inset-0 flex justify-center items-center"
           animate={{ opacity: hovered ? 1 : 0.4 }}
           transition={{ duration: 0.25 }}
           style={{ background: "rgba(0,0,0,0.45)" }}
@@ -527,7 +621,7 @@ function VideoCard({ video, onPlay }: { video: Video; onPlay: () => void }) {
           <motion.div
             animate={{ scale: hovered ? 1.1 : 1 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="w-14 h-14 rounded-full flex items-center justify-center border-2 border-red-600"
+            className="flex justify-center items-center border-2 border-red-600 rounded-full w-14 h-14"
             style={{ background: "rgba(204,0,0,0.2)" }}
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="#CC0000">
@@ -563,7 +657,7 @@ function WorkSection() {
   return (
     <section
       id="what-i-do"
-      className="py-16 md:py-24 px-4 sm:px-8 md:px-16 lg:px-24"
+      className="px-4 sm:px-8 md:px-16 lg:px-24 py-16 md:py-24"
     >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -572,7 +666,7 @@ function WorkSection() {
         transition={{ duration: 0.6 }}
         className="mb-10 md:mb-14"
       >
-        <div className="h-px w-10 bg-red-600 mb-4" />
+        <div className="bg-red-600 mb-4 w-10 h-px" />
         <h2
           className="text-white leading-none"
           style={{
@@ -585,7 +679,7 @@ function WorkSection() {
         </h2>
       </motion.div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-10">
+      <div className="gap-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-10">
         {CATEGORIES.map((cat, i) => {
           const isActive = activeCategory === cat.id;
           return (
@@ -596,7 +690,7 @@ function WorkSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.07 }}
               onClick={() => handleCategoryClick(cat.id, isActive)}
-              className="relative flex items-center gap-4 p-4 text-left overflow-hidden transition-all duration-300 border"
+              className="relative flex items-center gap-4 p-4 border overflow-hidden text-left transition-all duration-300"
               style={{
                 borderColor: isActive
                   ? "rgba(204,0,0,0.6)"
@@ -608,7 +702,7 @@ function WorkSection() {
               }}
             >
               <div
-                className="w-16 h-12 shrink-0 overflow-hidden"
+                className="w-16 h-12 overflow-hidden shrink-0"
                 style={{ borderRadius: "1px" }}
               >
                 <img
@@ -624,7 +718,7 @@ function WorkSection() {
                 />
               </div>
               <span
-                className="flex-1 text-sm md:text-base font-semibold uppercase tracking-wider transition-colors duration-300"
+                className="flex-1 font-semibold text-sm md:text-base uppercase tracking-wider transition-colors duration-300"
                 style={{
                   fontFamily: "var(--font-condensed)",
                   letterSpacing: "0.2em",
@@ -636,7 +730,7 @@ function WorkSection() {
               <motion.div
                 animate={{ rotate: isActive ? 90 : 0 }}
                 transition={{ duration: 0.3 }}
-                className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 border"
+                className="flex justify-center items-center border rounded-full w-8 h-8 shrink-0"
                 style={{
                   borderColor: isActive
                     ? "rgba(204,0,0,0.6)"
@@ -664,18 +758,18 @@ function WorkSection() {
           >
             <div className="pt-2 pb-4">
               <div className="flex items-center gap-4 mb-6">
-                <div className="h-px flex-1 bg-white/[0.06]" />
+                <div className="flex-1 bg-white/[0.06] h-px" />
                 <span
-                  className="text-[15px] tracking-[0.5em] uppercase text-red-700"
+                  className="text-[15px] text-red-700 uppercase tracking-[0.5em]"
                   style={{ fontFamily: "var(--font-condensed)" }}
                 >
                   {CATEGORIES.find((c) => c.id === activeCategory)?.label}
                 </span>
-                <div className="h-px flex-1 bg-white/[0.06]" />
+                <div className="flex-1 bg-white/[0.06] h-px" />
               </div>
 
               {videos.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                   {videos.map((v) => (
                     <VideoCard
                       key={v.id}
@@ -689,11 +783,11 @@ function WorkSection() {
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="flex flex-col items-center justify-center py-20 gap-4"
+                  className="flex flex-col justify-center items-center gap-4 py-20"
                 >
-                  <span className="text-4xl text-red-600/30">⬡</span>
+                  <span className="text-red-600/30 text-4xl">⬡</span>
                   <p
-                    className="text-[11px] tracking-[0.5em] uppercase text-white/20"
+                    className="text-[11px] text-white/20 uppercase tracking-[0.5em]"
                     style={{ fontFamily: "var(--font-condensed)" }}
                   >
                     Coming Soon
@@ -775,14 +869,14 @@ function CTASection() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-        className="max-w-4xl mx-auto px-6 sm:px-10 md:px-16 text-center"
+        className="mx-auto px-6 sm:px-10 md:px-16 max-w-4xl text-center"
       >
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className="text-[10px] sm:text-xs tracking-[0.5em] uppercase mb-6"
+          className="mb-6 text-[10px] sm:text-xs uppercase tracking-[0.5em]"
           style={{ fontFamily: "var(--font-condensed)", color: "#CC0000" }}
         >
           Ready to Create?
@@ -792,14 +886,14 @@ function CTASection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.75, delay: 0.25 }}
-          className="leading-none mb-10 md:mb-14"
+          className="mb-10 md:mb-14 leading-none"
           style={{
             fontFamily: "var(--font-bebas)",
             fontSize: "clamp(52px, 12vw, 130px)",
             letterSpacing: "0.04em",
           }}
         >
-          <span className="text-white block">LET&apos;S MAKE</span>
+          <span className="block text-white">LET&apos;S MAKE</span>
           <span style={{ color: "#CC0000" }} className="block">
             MAGIC
           </span>
@@ -812,7 +906,7 @@ function CTASection() {
         >
           <Link
             href="/contact"
-            className="group relative inline-flex items-center gap-3 overflow-hidden border-2 px-10 sm:px-14 py-4 sm:py-5 transition-all duration-500"
+            className="group inline-flex relative items-center gap-3 px-10 sm:px-14 py-4 sm:py-5 border-2 overflow-hidden transition-all duration-500"
             style={{
               fontFamily: "var(--font-condensed)",
               fontSize: "clamp(11px, 1.5vw, 14px)",
@@ -825,11 +919,11 @@ function CTASection() {
               className="absolute inset-0 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-400"
               style={{ background: "#CC0000" }}
             />
-            <span className="relative z-10 uppercase group-hover:text-white transition-colors duration-400">
+            <span className="z-10 relative group-hover:text-white uppercase transition-colors duration-400">
               Start Your Journey
             </span>
             <motion.span
-              className="relative z-10 group-hover:text-white transition-colors duration-400"
+              className="z-10 relative group-hover:text-white transition-colors duration-400"
               animate={{ x: [0, 4, 0] }}
               transition={{ duration: 1.8, repeat: Infinity }}
             >
