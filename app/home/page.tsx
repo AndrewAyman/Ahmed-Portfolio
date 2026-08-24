@@ -46,6 +46,11 @@ const CATEGORIES = [
     label: "Factories",
     img: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=200&h=130&fit=crop&auto=format",
   },
+    {
+    id: "Medical",
+    label: "Medical",
+    img: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=200&h=130&fit=crop&auto=format",
+  },
   {
     id: "Others",
     label: "Others",
@@ -120,6 +125,14 @@ const VIDEOS: Record<string, Video[]> = {
       desc: "وصف قصير",
       youtubeId: "87WzVCqIVtw",
     },
+        {
+      id: "c-8",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "7TgCWYLc7To",
+    },
   ],
   Promo: [
     {
@@ -156,14 +169,14 @@ const VIDEOS: Record<string, Video[]> = {
     },
   ],
   Gym: [
-    {
-      id: "g-1",
-      title: "اسم الفيديو",
-      client: "اسم الكلايينت",
-      year: "2024",
-      desc: "وصف قصير",
-      youtubeId: "ie0itE7YmGI",
-    },
+    // {
+    //   id: "g-1",
+    //   title: "اسم الفيديو",
+    //   client: "اسم الكلايينت",
+    //   year: "2024",
+    //   desc: "وصف قصير",
+    //   youtubeId: "ie0itE7YmGI",
+    // },
     {
       id: "g-2",
       title: "اسم الفيديو",
@@ -244,6 +257,22 @@ const VIDEOS: Record<string, Video[]> = {
       desc: "وصف قصير",
       youtubeId: "Uuq85cumWTk",
     },
+        {
+      id: "g-12",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "bNx6bzIx26A",
+    },
+            {
+      id: "g-13",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "NnoAYFEvRGQ",
+    },
   ],
   Product: [
     {
@@ -298,6 +327,64 @@ const VIDEOS: Record<string, Video[]> = {
       youtubeId: "eCBYkWAvUZM",
     },
   ],
+    Medical: [
+    {
+      id: "f-1",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "iEtlZ_KhXh0",
+    },
+    {
+      id: "f-2",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "7vmO_45Owg0",
+    },
+        {
+      id: "f-3",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "7TgCWYLc7To",
+    },
+            {
+      id: "f-4",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "o_6MtCLAw7k",
+    },
+                {
+      id: "f-5",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "4NxXotUl-9g",
+    },
+                    {
+      id: "f-6",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "UipQRii9BwU",
+    },
+                        {
+      id: "f-7",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "v4PfmFrR3T0",
+    },
+  ],
   Others: [
     {
       id: "o-1",
@@ -347,6 +434,15 @@ const VIDEOS: Record<string, Video[]> = {
       desc: "وصف قصير",
       youtubeId: "QKSJ_CBgjhc",
     },
+                        {
+      id: "o-7",
+      title: "اسم الفيديو",
+      client: "اسم الكلايينت",
+      year: "2024",
+      desc: "وصف قصير",
+      youtubeId: "4NxXotUl-9g",
+    },
+    
   ],
 };
 
