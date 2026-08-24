@@ -54,7 +54,7 @@ const CATEGORIES = [
     {
     id: "Medical",
     label: "Medical",
-    img: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=200&h=130&fit=crop&auto=format",
+    img: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=200&h=130&fit=crop&auto=format",
   },
   {
     id: "Others",
