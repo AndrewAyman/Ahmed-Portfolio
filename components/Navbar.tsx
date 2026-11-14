@@ -20,6 +20,7 @@ export default function Navbar() {
     { label: "Portfolio", href: "/home" },
     { label: "Services", href: "/services" },
     { label: "Client", href: "/client" },
+    { label: "Feedback", href: "/feedback" }, // ← الرابط الجديد
     { label: "Questions", href: "/contact" },
     { label: "Vlogs", href: "/vlogs" },
   ];
@@ -34,10 +35,10 @@ export default function Navbar() {
     show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
   };
 
-  /* ── Logo: removed overflow-hidden to stop clipping ── */
+  /* ── Logo ── */
   const LogoImage = ({ width, height }: { width: number; height: number }) => (
     <div
-      className="relative shrink-0" // ← شيلنا overflow-hidden
+      className="relative shrink-0"
       style={{ width, height }}
     >
       <Image
@@ -46,7 +47,7 @@ export default function Navbar() {
         fill
         className="object-contain"
         style={{
-          transform: "scale(2.8) translateY(12%)", // ← زودنا translateY من 8% لـ 12%
+          transform: "scale(2.8) translateY(12%)",
           transformOrigin: "center center",
         }}
         priority

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -10,7 +9,6 @@ import HeroClient from "@/components/HeroClient";
 import Testimonials from "@/components/Testimonials";
 import Footer from "@/components/Footer";
 import BehindTheScene from "@/components/BehindTheScene";
-import FeedbackPage from "@/components/FeedBack";
 
 import { CATEGORIES, VIDEOS, slugOf } from "@/lib/work-data";
 
@@ -292,10 +290,9 @@ export default function HomePage() {
         <Testimonials />
       </section>
 
-      <CTASection />
-      <FeedbackPage />
       <BehindTheScene />
+      <CTASection />
       <Footer />
     </main>
   );
-}
+} 
