@@ -5,6 +5,9 @@ import {
   AnimatePresence,
   useScroll,
   useTransform,
+  useMotionValue,
+  useSpring,
+  type MotionValue,
 } from "framer-motion";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
@@ -23,16 +26,85 @@ const ROTATING_QUOTES = [
   "videography is the poetry of life.",
 ];
 
-const LENS_RINGS = [
-  { size: "100%", border: "2px solid rgba(204,0,0,0.35)", inset: 0 },
-  { size: "80%", border: "2px solid rgba(204,0,0,0.55)", inset: "10%" },
-  { size: "60%", border: "1px solid rgba(204,0,0,0.4)", inset: "20%" },
-];
+/* ─── الخلفية: صورة 1 بدوتون أحمر/أسود + حركة خفيفة ─────────────── */
+function BackgroundImages({
+  scrollYProgress,
+}: {
+  scrollYProgress: MotionValue<number>;
+}) {
+  // الصورة بتتحرك عكس اتجاه الماوس شوية
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  useEffect(() => {
+    const h = (e: MouseEvent) => {
+      mx.set(e.clientX / window.innerWidth - 0.5);
+      my.set(e.clientY / window.innerHeight - 0.5);
+    };
+    window.addEventListener("mousemove", h);
+    return () => window.removeEventListener("mousemove", h);
+  }, [mx, my]);
+  const sx = useSpring(mx, { stiffness: 50, damping: 20 });
+  const sy = useSpring(my, { stiffness: 50, damping: 20 });
+
+  const m1x = useTransform(sx, [-0.5, 0.5], [24, -24]);
+  const m1y = useTransform(sy, [-0.5, 0.5], [16, -16]);
+  const s1 = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
+
+  const mask =
+    "radial-gradient(ellipse 80% 80% at 75% 35%, black 25%, transparent 75%)";
+
+  return (
+    <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+      <motion.div
+        className="absolute top-0 right-0 w-full md:w-[64%] h-[62%] md:h-[78%]"
+        style={{ x: m1x, y: m1y }}
+      >
+        <motion.div className="absolute inset-0" style={{ y: s1 }}>
+          <div
+            className="absolute inset-0 opacity-60 md:opacity-90"
+            style={{
+              background: "#9b0000",
+              maskImage: mask,
+              WebkitMaskImage: mask,
+            }}
+          >
+            <motion.div
+              className="absolute inset-[-6%]"
+              style={{
+                backgroundImage: "url('/images/1.jpg')",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                filter: "grayscale(1) contrast(1.15)",
+                mixBlendMode: "multiply",
+              }}
+              animate={{ scale: [1, 1.1, 1] }}
+              transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </div>
+        </motion.div>
+      </motion.div>
+
+      {/* تغميق ورا الكلام عشان يفضل مقروء */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 45% at 50% 78%, rgba(8,8,8,0.8) 0%, transparent 70%)",
+        }}
+      />
+    </div>
+  );
+}
+
+/* ─── عدسة كاميرا حقيقية ─────────────────────────────────────────
+   جسم معدن + حلقة فوكس مخرّشة بتلف ببطء + حلقة حمرا (زي عدسات L)
+   + كتابة محفورة + زجاج بطبقات + بلاستيك آيريس 8 ريش + لمعان     */
+const ENGRAVE = "YOUR VISION — MY LENS — 35mm F1.4 — Ø77 — ";
 
 function LensDecor({ mobile = false }: { mobile?: boolean }) {
   const size = mobile
-    ? "clamp(80px, 28vw, 120px)"
-    : "clamp(120px, 18vw, 180px)";
+    ? "clamp(110px, 38vw, 160px)"
+    : "clamp(150px, 20vw, 230px)";
 
   return (
     <motion.div
@@ -41,35 +113,203 @@ function LensDecor({ mobile = false }: { mobile?: boolean }) {
         aspectRatio: "1",
         position: "relative",
         flexShrink: 0,
+        filter: "drop-shadow(0 0 38px rgba(204,0,0,0.45))",
       }}
-      initial={{ scale: 0, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+      initial={{ scale: 0, opacity: 0, rotate: -40 }}
+      animate={{ scale: 1, opacity: 1, rotate: 0 }}
+      transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
     >
-      {LENS_RINGS.map((r, i) => (
-        <div
-          key={i}
-          className="absolute rounded-full"
-          style={{ inset: r.inset, border: r.border }}
-        />
-      ))}
-      <motion.div
-        className="absolute rounded-full"
-        style={{ inset: "15%", border: "1px dashed rgba(204,0,0,0.3)" }}
-        animate={{ rotate: 360 }}
-        transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+      {/* جسم العدسة (معدن) */}
+      <div
+        className="absolute inset-0 rounded-full"
+        style={{
+          background:
+            "conic-gradient(from 20deg, #161616, #3d3d3d, #121212, #4a4a4a, #101010, #333, #161616)",
+          boxShadow:
+            "inset 0 0 0 2px rgba(255,255,255,0.07), inset 0 0 22px rgba(0,0,0,0.95), 0 14px 40px rgba(0,0,0,0.85)",
+        }}
       />
+
+      {/* حلقة الفوكس المخرّشة (بتلف ببطء) */}
       <motion.div
         className="absolute rounded-full"
         style={{
-          inset: "30%",
+          inset: "4%",
           background:
-            "radial-gradient(circle, rgba(204,0,0,0.9) 0%, rgba(150,0,0,0.6) 60%, transparent 100%)",
-          boxShadow: "0 0 30px rgba(204,0,0,0.5)",
+            "repeating-conic-gradient(from 0deg, #0a0a0a 0deg 2.5deg, #3a3a3a 2.5deg 5deg)",
+          boxShadow: "inset 0 0 14px rgba(0,0,0,0.9)",
         }}
-        animate={{ opacity: [0.85, 1, 0.85] }}
-        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+        animate={{ rotate: -360 }}
+        transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
       />
+      {/* إضاءة على الحلقة عشان تبان مجسمة */}
+      <div
+        className="absolute rounded-full"
+        style={{
+          inset: "4%",
+          background:
+            "radial-gradient(circle at 28% 22%, rgba(255,255,255,0.28), transparent 42%), radial-gradient(circle at 82% 88%, rgba(0,0,0,0.65), transparent 55%)",
+        }}
+      />
+
+      {/* الحلقة الداخلية السودا (عليها الكتابة) */}
+      <div
+        className="absolute rounded-full"
+        style={{
+          inset: "14%",
+          background:
+            "conic-gradient(from 200deg, #050505, #1c1c1c, #070707, #222, #050505)",
+          boxShadow:
+            "inset 0 0 0 1px rgba(255,255,255,0.08), 0 0 12px rgba(0,0,0,0.9)",
+        }}
+      />
+
+      {/* الحلقة الحمرا */}
+      <div
+        className="absolute rounded-full"
+        style={{
+          inset: "21%",
+          border: "2px solid #CC0000",
+          boxShadow:
+            "0 0 12px rgba(204,0,0,0.8), inset 0 0 8px rgba(204,0,0,0.6)",
+        }}
+      />
+
+      {/* الزجاج + الآيريس + الانعكاسات */}
+      <svg viewBox="0 0 200 200" className="absolute inset-0 w-full h-full">
+        <defs>
+          <radialGradient id="lensGlass" cx="50%" cy="50%" r="50%">
+            <stop offset="0" stopColor="#1c0007" />
+            <stop offset="0.55" stopColor="#07030a" />
+            <stop offset="0.85" stopColor="#14001c" />
+            <stop offset="1" stopColor="#000" />
+          </radialGradient>
+          <radialGradient id="lensCore" cx="50%" cy="50%" r="50%">
+            <stop offset="0" stopColor="#ff4d4d" stopOpacity="1" />
+            <stop offset="0.4" stopColor="#cc0000" stopOpacity="0.9" />
+            <stop offset="1" stopColor="#5a0000" stopOpacity="0" />
+          </radialGradient>
+          <linearGradient id="lensBlade" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#343434" />
+            <stop offset="1" stopColor="#0b0b0b" />
+          </linearGradient>
+          <linearGradient id="lensCoat" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#8a2be2" stopOpacity="0.9" />
+            <stop offset="0.35" stopColor="#00e0a0" stopOpacity="0.55" />
+            <stop offset="0.65" stopColor="#ff1a1a" stopOpacity="0.8" />
+            <stop offset="1" stopColor="#3a6cff" stopOpacity="0.6" />
+          </linearGradient>
+          <filter id="lensBlur" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="2" />
+          </filter>
+          <path
+            id="lensTextPath"
+            d="M100,100 m-65,0 a65,65 0 1,1 130,0 a65,65 0 1,1 -130,0"
+          />
+        </defs>
+
+        {/* الكتابة المحفورة */}
+        <text
+          fill="rgba(255,255,255,0.5)"
+          fontSize="6"
+          style={{
+            fontFamily: "var(--font-condensed)",
+            textTransform: "uppercase",
+          }}
+        >
+          <textPath
+            href="#lensTextPath"
+            textLength="402"
+            lengthAdjust="spacing"
+          >
+            {ENGRAVE + ENGRAVE}
+          </textPath>
+        </text>
+
+        {/* الزجاج الأمامي */}
+        <circle cx="100" cy="100" r="55" fill="url(#lensGlass)" />
+        <circle
+          cx="100"
+          cy="100"
+          r="55"
+          fill="none"
+          stroke="rgba(255,255,255,0.18)"
+          strokeWidth="0.8"
+        />
+        {/* حدود عناصر الزجاج الداخلية */}
+        <circle cx="100" cy="100" r="47" fill="none" stroke="rgba(255,70,70,0.25)" strokeWidth="0.6" />
+        <circle cx="100" cy="100" r="41" fill="none" stroke="rgba(130,90,255,0.22)" strokeWidth="0.6" />
+
+        {/* الآيريس: 8 ريش بتتنفس */}
+        <g transform="translate(100 100)">
+          <motion.g
+            animate={{ scale: [1, 0.93, 1] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {Array.from({ length: 8 }).map((_, i) => (
+              <path
+                key={i}
+                d="M-5 -35 L17 -31 L11 -10 L-10 -12 Z"
+                transform={`rotate(${i * 45})`}
+                fill="url(#lensBlade)"
+                stroke="rgba(255,255,255,0.14)"
+                strokeWidth="0.5"
+              />
+            ))}
+          </motion.g>
+        </g>
+
+        {/* قلب العدسة المضيء */}
+        <motion.circle
+          cx="100"
+          cy="100"
+          r="15"
+          fill="url(#lensCore)"
+          animate={{ opacity: [0.75, 1, 0.75] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        {/* انعكاس الطلاء الملوّن (بيلف ببطء) */}
+        <motion.g
+          animate={{ rotate: 360 }}
+          transition={{ duration: 36, repeat: Infinity, ease: "linear" }}
+          style={{ opacity: 0.55 }}
+        >
+          <circle
+            cx="100"
+            cy="100"
+            r="51"
+            fill="none"
+            stroke="url(#lensCoat)"
+            strokeWidth="2.4"
+            strokeDasharray="60 260"
+            filter="url(#lensBlur)"
+          />
+        </motion.g>
+
+        {/* لمعان ثابت */}
+        <ellipse
+          cx="77"
+          cy="72"
+          rx="17"
+          ry="8"
+          fill="#fff"
+          opacity="0.28"
+          transform="rotate(-35 77 72)"
+          filter="url(#lensBlur)"
+        />
+        <ellipse
+          cx="126"
+          cy="129"
+          rx="9"
+          ry="4"
+          fill="#fff"
+          opacity="0.12"
+          transform="rotate(-35 126 129)"
+          filter="url(#lensBlur)"
+        />
+        <circle cx="70" cy="66" r="1.6" fill="#fff" opacity="0.85" />
+      </svg>
     </motion.div>
   );
 }
@@ -212,17 +452,6 @@ export default function HeroClient() {
   const lensScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.5]);
   const lensOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
 
-  // Scroll to What I Do section
-  const scrollToWhatIDo = () => {
-    const section = document.getElementById("what-i-do");
-    if (section) {
-      section.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
-  };
-
   return (
     <section
       ref={containerRef}
@@ -246,14 +475,8 @@ export default function HeroClient() {
         />
       </motion.div>
 
-      {/* top red line with scroll animation */}
-      <motion.div
-        className="absolute left-0 h-[1px] top-24"
-        style={{ background: "rgba(204,0,0,0.4)" }}
-        initial={{ width: "0%" }}
-        animate={{ width: "100%" }}
-        transition={{ duration: 1.2, ease: "easeInOut", delay: 0.3 }}
-      />
+      {/* صورة الخلفية */}
+      <BackgroundImages scrollYProgress={scrollYProgress} />
 
       {/* ── MOBILE layout ── */}
       <motion.div
@@ -323,32 +546,6 @@ export default function HeroClient() {
                 →
               </motion.span>
             </Link>
-
-            {/* View Portfolio Button - NOW SCROLLS TO WHAT I DO */}
-            <button
-              onClick={scrollToWhatIDo}
-              className="group inline-flex items-center gap-3 px-8 py-3.5 w-full justify-center"
-              style={{
-                fontFamily: "var(--font-condensed)",
-                fontSize: "11px",
-                letterSpacing: "0.45em",
-                border: "2px solid rgba(204,0,0,0.35)",
-                color: "rgba(255,255,255,0.45)",
-                background: "transparent",
-                cursor: "pointer",
-              }}
-            >
-              <span className="uppercase group-hover:text-white transition-colors duration-300">
-                View Portfolio
-              </span>
-              <motion.span
-                className="group-hover:text-white transition-colors duration-300"
-                animate={{ y: [0, 3, 0] }}
-                transition={{ duration: 1.8, repeat: Infinity }}
-              >
-                ↓
-              </motion.span>
-            </button>
           </div>
         </motion.div>
       </motion.div>
@@ -425,32 +622,6 @@ export default function HeroClient() {
                 →
               </motion.span>
             </Link>
-
-            {/* View Portfolio Button - DESKTOP */}
-            <button
-              onClick={scrollToWhatIDo}
-              className="group inline-flex items-center gap-3 px-10 py-4"
-              style={{
-                fontFamily: "var(--font-condensed)",
-                fontSize: "clamp(10px, 1.5vw, 13px)",
-                letterSpacing: "0.45em",
-                border: "2px solid rgba(204,0,0,0.35)",
-                color: "rgba(255,255,255,0.55)",
-                background: "transparent",
-                cursor: "pointer",
-              }}
-            >
-              <span className="uppercase group-hover:text-white transition-colors duration-300">
-                View Portfolio
-              </span>
-              <motion.span
-                className="group-hover:text-white transition-colors duration-300"
-                animate={{ y: [0, 3, 0] }}
-                transition={{ duration: 1.8, repeat: Infinity }}
-              >
-                ↓
-              </motion.span>
-            </button>
           </div>
         </motion.div>
       </motion.div>
