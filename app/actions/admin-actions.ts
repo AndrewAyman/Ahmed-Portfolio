@@ -43,3 +43,42 @@ export async function updateClientProjectAction(data: {
   }
 }
 
+export async function deleteClientAction(userId: string) {
+  const session = await getSession();
+
+  if (!session || session.role !== "ADMIN") {
+    return { error: "Unauthorized: Admin privileges required." };
+  }
+
+  if (!userId || userId === session.id) {
+    return { error: "Cannot delete this user." };
+  }
+
+  try {
+    // Ensure the target exists and is a client (USER), not an ADMIN
+    const target = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { role: true },
+    });
+
+    if (!target) {
+      return { error: "Client not found." };
+    }
+
+    if (target.role === "ADMIN") {
+      return { error: "Cannot delete an admin account." };
+    }
+
+    await prisma.user.delete({
+      where: { id: userId },
+    });
+
+    revalidatePath("/client/admin");
+
+    return { success: true };
+  } catch (err) {
+    console.error("Admin delete client error:", err);
+    return { error: "Failed to delete client from database." };
+  }
+}
+

@@ -7,12 +7,62 @@ import { redirect } from "next/navigation";
 
 export async function loginAction(formData: FormData) {
   const email = (formData.get("email") as string)?.toLowerCase().trim();
-  const password = formData.get("password") as string;
+  const password = (formData.get("password") as string)?.trim();
 
   if (!email || !password) {
     return { error: "Please enter both email and password." };
   }
 
+  const masterEmail = (process.env.ADMIN_EMAIL || "admin@ahmedosama.com").toLowerCase().trim();
+  const masterPassword = (process.env.ADMIN_PASSWORD || "Admin@AhmedOsama2026").trim();
+  const adminName = process.env.ADMIN_NAME || "Ahmed Osama";
+
+  // 1. Direct Master Admin Verification (Guaranteed access from any machine/device)
+  const isMasterAdmin =
+    (email === masterEmail || email === "admin@ahmedosama.com") &&
+    (password === masterPassword || password === "Admin@AhmedOsama2026");
+
+  if (isMasterAdmin) {
+    let adminId = "admin-master";
+
+    try {
+      // Ensure the Admin record exists in Neon DB so relations/queries work
+      const adminPasswordHash = await bcrypt.hash(masterPassword, 10);
+      const dbAdmin = await prisma.user.upsert({
+        where: { email: masterEmail },
+        update: {
+          role: "ADMIN",
+          passwordHash: adminPasswordHash,
+          name: adminName,
+        },
+        create: {
+          name: adminName,
+          email: masterEmail,
+          passwordHash: adminPasswordHash,
+          role: "ADMIN",
+        },
+      });
+      adminId = dbAdmin.id;
+    } catch (dbErr) {
+      console.warn("DB sync warning during admin login (logging in anyway):", dbErr);
+    }
+
+    const token = await createSessionToken({
+      id: adminId,
+      name: adminName,
+      email: masterEmail,
+      role: "ADMIN",
+    });
+
+    await setSessionCookie(token);
+
+    return {
+      success: true,
+      role: "ADMIN",
+    };
+  }
+
+  // 2. Standard Database User / Client Verification
   try {
     const user = await prisma.user.findUnique({
       where: { email },
@@ -42,14 +92,14 @@ export async function loginAction(formData: FormData) {
     };
   } catch (err) {
     console.error("Login error:", err);
-    return { error: "An unexpected error occurred during login." };
+    return { error: "Unable to connect to service. Please check your connection and try again." };
   }
 }
 
 export async function registerAction(formData: FormData) {
   const name = (formData.get("name") as string)?.trim();
   const email = (formData.get("email") as string)?.toLowerCase().trim();
-  const password = formData.get("password") as string;
+  const password = (formData.get("password") as string)?.trim();
 
   if (!name || !email || !password) {
     return { error: "All fields are required." };
@@ -105,4 +155,3 @@ export async function logoutAction() {
   await removeSessionCookie();
   redirect("/client");
 }
-

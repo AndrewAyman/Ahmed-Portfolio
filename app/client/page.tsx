@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { loginAction, registerAction } from "@/app/actions/auth-actions";
-import { Lock, Mail, User, ArrowRight, Loader2, ShieldCheck, Sparkles, KeyRound } from "lucide-react";
+import { Lock, Mail, User, ArrowRight, Loader2, ShieldCheck } from "lucide-react";
 import { toast } from "react-toastify";
 import Link from "next/link";
 
@@ -28,11 +28,10 @@ export default function ClientAuthPage() {
 
     toast.success("Welcome back!");
     if (res?.role === "ADMIN") {
-      router.push("/client/admin");
+      window.location.href = "/client/admin";
     } else {
-      router.push("/client/portal");
+      window.location.href = "/client/portal";
     }
-    router.refresh();
   }
 
   async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
@@ -49,41 +48,40 @@ export default function ClientAuthPage() {
     }
 
     toast.success("Account created successfully!");
-    router.push("/client/portal");
-    router.refresh();
+    window.location.href = "/client/portal";
   }
 
   return (
-    <div className="relative flex flex-col justify-between bg-[#080808] p-6 w-full min-h-screen overflow-hidden font-sans text-white">
+    <div className="relative flex flex-col justify-between bg-[#080808] p-4 sm:p-6 w-full min-h-screen overflow-hidden font-sans text-white">
       {/* Background ambient red glow */}
       <div className="top-1/4 left-1/2 absolute bg-red-600/10 blur-[140px] rounded-full w-[500px] h-[500px] -translate-x-1/2 pointer-events-none" />
 
       {/* Top Navbar Brand */}
-      <header className="z-10 relative flex justify-between items-center mx-auto pt-4 w-full max-w-6xl">
+      <header className="z-10 relative flex justify-between items-center mx-auto pt-3 sm:pt-4 w-full max-w-6xl">
         <Link href="/home" className="group flex items-center gap-2">
-          <span className="text-zinc-400 group-hover:text-white text-xs uppercase tracking-[0.3em] transition">
+          <span className="text-zinc-400 group-hover:text-white text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] transition">
             ← Back to Portfolio
           </span>
         </Link>
-        <span className="bg-red-600/10 px-3 py-1 border border-red-600/20 rounded-full font-semibold text-[11px] text-red-500 uppercase tracking-[0.3em]">
+        <span className="bg-red-600/10 px-3 py-1 border border-red-600/20 rounded-full font-semibold text-[10px] sm:text-[11px] text-red-500 uppercase tracking-[0.2em] sm:tracking-[0.3em] whitespace-nowrap">
           Portal Gateway
         </span>
       </header>
 
       {/* Main Auth Card */}
-      <main className="z-10 relative flex justify-center items-center my-10">
+      <main className="z-10 relative flex justify-center items-center my-6 sm:my-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="bg-[#111111]/90 shadow-2xl shadow-black/90 backdrop-blur-xl p-8 border border-white/10 rounded-2xl w-full max-w-md"
+          className="bg-[#111111]/90 shadow-2xl shadow-black/90 backdrop-blur-xl p-6 sm:p-8 border border-white/10 rounded-2xl w-full max-w-md"
         >
           {/* Header */}
-          <div className="mb-8 text-center">
+          <div className="mb-6 sm:mb-8 text-center">
             <div className="inline-flex justify-center items-center bg-red-600/10 shadow-lg shadow-red-600/20 mb-3 border border-red-600/30 rounded-full w-12 h-12 text-red-500">
               <ShieldCheck className="w-6 h-6" />
             </div>
-            <h1 className="font-bold text-white text-2xl uppercase tracking-wider">
+            <h1 className="font-bold text-white text-xl sm:text-2xl uppercase tracking-wider">
               Client Portal
             </h1>
             <p className="mt-1 text-zinc-400 text-xs uppercase tracking-widest">
@@ -250,20 +248,6 @@ export default function ClientAuthPage() {
               </motion.form>
             )}
           </AnimatePresence>
-
-          {/* Quick Credential Hints for Testing */}
-          <div className="space-y-2 bg-black/40 mt-8 p-3 pt-5 border-white/10 border-t rounded-xl text-zinc-400 text-xs">
-            <div className="flex items-center gap-1.5 font-semibold text-[10px] text-zinc-300 uppercase tracking-wider">
-              <KeyRound className="w-3.5 h-3.5 text-red-500" />
-              <span>Instant Test Credentials:</span>
-            </div>
-            <div className="text-[11px] leading-relaxed">
-              <span className="font-mono text-red-400">Admin:</span> admin@ahmedosama.com / Admin@AhmedOsama2026
-            </div>
-            <div className="text-[11px] leading-relaxed">
-              <span className="font-mono text-zinc-300">Demo Client:</span> client@demo.com / Client123456!
-            </div>
-          </div>
         </motion.div>
       </main>
 
