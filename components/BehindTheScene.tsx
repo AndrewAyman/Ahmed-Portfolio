@@ -229,33 +229,6 @@ export default function BehindTheScene() {
                 worldwide.
               </p>
             </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 pt-4">
-              {[
-                { label: "Years Exp", value: "4+" },
-                { label: "Projects", value: "50+" },
-                { label: "Clients", value: "30+" },
-              ].map((stat) => (
-                <div key={stat.label} className="text-center">
-                  <p
-                    className="text-red-600 font-bold"
-                    style={{
-                      fontFamily: "var(--font-bebas)",
-                      fontSize: "clamp(28px, 4vw, 38px)",
-                    }}
-                  >
-                    {stat.value}
-                  </p>
-                  <p
-                    className="text-white/30 text-xs tracking-wider uppercase"
-                    style={{ fontFamily: "var(--font-condensed)" }}
-                  >
-                    {stat.label}
-                  </p>
-                </div>
-              ))}
-            </div>
           </motion.div>
 
           {/* Right side - Photographer Image Grid (3 photos) */}

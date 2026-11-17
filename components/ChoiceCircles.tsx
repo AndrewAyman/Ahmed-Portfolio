@@ -4,19 +4,58 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-/* ─── circle size based on viewport ─── */
+/* ─── circle size based on viewport width & height ─── */
 function useCircleSize() {
-  const [size, setSize] = useState(160);
+  const [size, setSize] = useState(200);
 
   useEffect(() => {
     const calc = () => {
       const vw = window.innerWidth;
-      if (vw < 360) setSize(120);
-      else if (vw < 480) setSize(138);
-      else if (vw < 640) setSize(155);
-      else if (vw < 768) setSize(170);
-      else if (vw < 1024) setSize(190);
-      else setSize(220);
+      const vh = window.innerHeight;
+
+      if (vw < 768) {
+        // Mobile / Small screen: 2 columns, 3 rows
+        const maxFromW = (vw - 44) / 2;
+        const maxFromH = (vh - 120) / 3;
+
+        const optimalMobile = Math.min(
+          maxFromW,
+          maxFromH > 0 ? maxFromH : maxFromW,
+          145
+        );
+        setSize(Math.max(118, Math.round(optimalMobile)));
+      } else if (vw < 1024) {
+        // Tablet: 3 columns, 2 rows
+        const maxFromW = (vw - 70) / 3;
+        const maxFromH = (vh - 150) / 2;
+        const optimalTablet = Math.min(
+          maxFromW,
+          maxFromH > 0 ? maxFromH : maxFromW,
+          185
+        );
+        setSize(Math.max(150, Math.round(optimalTablet)));
+      } else if (vw < 1440) {
+        // Laptop / Mid Desktop: 3 columns, 2 rows
+        const maxFromW = (vw - 100) / 3;
+        const maxFromH = (vh - 170) / 2;
+        const optimalLaptop = Math.min(
+          maxFromW,
+          maxFromH > 0 ? maxFromH : maxFromW,
+          210
+        );
+        setSize(Math.max(175, Math.round(optimalLaptop)));
+      } else {
+        // Large desktop: 3 columns, 2 rows
+        // Balanced sweet spot: visible & impactful without overcrowding the screen
+        const maxFromW = (vw - 140) / 3;
+        const maxFromH = (vh - 180) / 2;
+        const optimalDesktop = Math.min(
+          maxFromW,
+          maxFromH > 0 ? maxFromH : maxFromW,
+          232
+        );
+        setSize(Math.max(195, Math.round(optimalDesktop)));
+      }
     };
     calc();
     window.addEventListener("resize", calc);
@@ -35,24 +74,38 @@ const choices = [
     delay: 0,
   },
   {
+    label: "Services",
+    sub: "What we offer",
+    icon: "◈",
+    href: "/services",
+    delay: 0.06,
+  },
+  {
+    label: "Client",
+    sub: "Access Portal",
+    icon: "◆",
+    href: "/client",
+    delay: 0.12,
+  },
+  {
+    label: "Feedback",
+    sub: "Client Stories",
+    icon: "♥",
+    href: "/feedback",
+    delay: 0.18,
+  },
+  {
     label: "Questions",
     sub: "Ask me anything",
     icon: "?",
     href: "/contact",
-    delay: 0.1,
+    delay: 0.24,
   },
   {
     label: "Vlogs",
     sub: "Feel The Story",
     icon: "★",
     href: "/vlogs",
-    delay: 0.2,
-  },
-  {
-    label: "Services",
-    sub: "What we offer",
-    icon: "◈",
-    href: "/services",
     delay: 0.3,
   },
 ];
@@ -61,19 +114,19 @@ export default function ChoiceCircles() {
   const router = useRouter();
   const size = useCircleSize();
 
-  /* ── font scales — increased for bigger text inside circles ── */
-  const iconSize = Math.round(size * 0.17); // was 0.13
-  const labelSize = Math.round(size * 0.13); // was 0.09
-  const subSize = Math.max(9, Math.round(size * 0.062)); // was 0.047
-  const gap = Math.round(size * 0.04);
+  /* ── font scales tailored to fit circle sizes cleanly & balanced ── */
+  const iconSize = Math.max(16, Math.round(size * 0.165));
+  const labelSize = Math.max(12, Math.round(size * 0.13));
+  const subSize = Math.max(8.5, Math.round(size * 0.056));
+  const gap = Math.max(2.5, Math.round(size * 0.03));
 
   return (
     <motion.div
-      className="fixed inset-0 z-40 flex flex-col items-center justify-center"
+      className="fixed inset-0 z-40 flex flex-col items-center justify-center overflow-y-auto px-4 py-6"
       style={{
         background:
           "radial-gradient(ellipse at 50% 50%, #3a0000 0%, #1a0000 60%, #0a0000 100%)",
-        gap: "clamp(24px, 4vh, 48px)",
+        gap: "clamp(16px, 3vh, 34px)",
       }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -233,34 +286,35 @@ export default function ChoiceCircles() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        className="text-center px-4 relative z-10"
+        className="text-center px-4 relative z-10 shrink-0"
       >
         <h1
-          className="text-red-600 leading-none mb-2"
+          className="text-red-600 leading-none mb-1 sm:mb-2"
           style={{
             fontFamily: "var(--font-bebas)",
-            fontSize: "clamp(40px, 10vw, 96px)",
+            fontSize: "clamp(36px, 5.2vw, 76px)",
             letterSpacing: "0.06em",
+            textShadow: "0 0 30px rgba(204,0,0,0.4)",
           }}
         >
           Where to next?
         </h1>
         <p
-          className="text-white/30 uppercase"
+          className="text-white/40 uppercase"
           style={{
             fontFamily: "var(--font-condensed)",
-            fontSize: "clamp(9px, 1.8vw, 13px)",
-            letterSpacing: "0.5em",
+            fontSize: "clamp(9px, 1.1vw, 13px)",
+            letterSpacing: "0.45em",
           }}
         >
           Choose your path
         </p>
       </motion.div>
 
-      {/* ── 2×2 grid ── */}
+      {/* ── 6 Circles Grid: 2 cols on mobile, 3 cols on desktop ── */}
       <div
-        className="grid grid-cols-2 relative z-10"
-        style={{ gap: `clamp(12px, 3vw, 40px)` }}
+        className="grid grid-cols-2 md:grid-cols-3 relative z-10"
+        style={{ gap: "clamp(12px, 2.2vw, 28px)" }}
       >
         {choices.map((choice, ci) => (
           <motion.button
@@ -268,20 +322,21 @@ export default function ChoiceCircles() {
             initial={{ opacity: 0, scale: 0.65 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{
-              delay: 0.4 + choice.delay,
+              delay: 0.3 + choice.delay,
               type: "spring",
               stiffness: 175,
               damping: 18,
             }}
-            whileHover={{ scale: 1.06 }}
+            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => router.push(choice.href)}
-            className="group relative flex flex-col items-center justify-center rounded-full"
+            className="group relative flex flex-col items-center justify-center rounded-full cursor-pointer"
             style={{
               width: size,
               height: size,
-              border: "2px solid rgba(204,0,0,0.3)",
-              background: "rgba(10,0,0,0.7)",
+              border: "2px solid rgba(204,0,0,0.38)",
+              background: "rgba(10,0,0,0.78)",
+              backdropFilter: "blur(8px)",
               flexShrink: 0,
             }}
           >
@@ -290,18 +345,18 @@ export default function ChoiceCircles() {
               className="absolute rounded-full pointer-events-none"
               style={{
                 inset: "-8px",
-                border: "1px dashed rgba(204,0,0,0.18)",
+                border: "1.5px dashed rgba(204,0,0,0.22)",
                 borderRadius: "50%",
               }}
               animate={{ rotate: ci % 2 === 0 ? 360 : -360 }}
-              transition={{ duration: 16, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
             />
 
             {/* pulse ring */}
             <motion.div
               className="absolute rounded-full pointer-events-none"
-              style={{ inset: 0, border: "1px solid rgba(204,0,0,0.1)" }}
-              animate={{ scale: [1, 1.12, 1], opacity: [0.5, 0, 0.5] }}
+              style={{ inset: 0, border: "1px solid rgba(204,0,0,0.12)" }}
+              animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0, 0.5] }}
               transition={{
                 duration: 3,
                 repeat: Infinity,
@@ -315,19 +370,19 @@ export default function ChoiceCircles() {
               style={{ gap }}
             >
               <span
-                className="text-red-600 leading-none"
+                className="text-red-600 leading-none transition-transform duration-300 group-hover:scale-110"
                 style={{ fontFamily: "var(--font-bebas)", fontSize: iconSize }}
               >
                 {choice.icon}
               </span>
               <span
-                className="text-white tracking-widest"
+                className="text-white tracking-widest uppercase transition-colors duration-300 group-hover:text-red-500"
                 style={{ fontFamily: "var(--font-bebas)", fontSize: labelSize }}
               >
                 {choice.label}
               </span>
               <span
-                className="text-white/30 uppercase tracking-widest"
+                className="text-white/40 uppercase tracking-widest transition-colors duration-300 group-hover:text-white/70"
                 style={{
                   fontFamily: "var(--font-condensed)",
                   fontSize: subSize,
@@ -341,8 +396,9 @@ export default function ChoiceCircles() {
             <div
               className="absolute inset-0 rounded-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               style={{
-                border: "2px solid rgba(204,0,0,0.7)",
-                boxShadow: "0 0 28px rgba(204,0,0,0.15)",
+                border: "2px solid rgba(220,20,20,0.9)",
+                boxShadow:
+                  "0 0 35px rgba(204,0,0,0.4), inset 0 0 25px rgba(204,0,0,0.15)",
               }}
             />
           </motion.button>

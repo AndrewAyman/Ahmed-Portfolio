@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   motion,
   AnimatePresence,
@@ -113,16 +113,16 @@ function Field({
   return (
     <div className="relative pb-px">
       <label
-        className="block font-condensed text-[14px] tracking-[0.5em] uppercase mb-3 transition-colors duration-300 font-semibold"
+        className="block mb-3 font-condensed font-semibold text-[14px] uppercase tracking-[0.5em] transition-colors duration-300"
         style={{ color: isActive ? "#FF1A1A" : "rgba(255,255,255,0.9)" }}
       >
         {label}
         {required && <span style={{ color: "#CC0000" }} className="ml-1">*</span>}
       </label>
       {children}
-      <div className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-white/40" />
+      <div className="right-0 bottom-0 left-0 absolute bg-white/40 h-[1.5px]" />
       <motion.div
-        className="absolute bottom-0 left-0 h-[2px] bg-red"
+        className="bottom-0 left-0 absolute bg-red h-[2px]"
         animate={{ width: focused === name ? "100%" : "0%" }}
         transition={{ duration: 0.35, ease: "easeInOut" }}
       />
@@ -149,7 +149,7 @@ function Area({
   setFocused: (v: string | null) => void;
 }) {
   return (
-    <div className="relative pb-px mt-1">
+    <div className="relative mt-1 pb-px">
       <textarea
         rows={rows}
         value={value}
@@ -160,9 +160,9 @@ function Area({
         className={`${inputCls} resize-none text-sm placeholder:text-sm`}
         style={{ direction: "rtl", letterSpacing: "0" }}
       />
-      <div className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-white/35" />
+      <div className="right-0 bottom-0 left-0 absolute bg-white/35 h-[1.5px]" />
       <motion.div
-        className="absolute bottom-0 left-0 h-[2px] bg-red"
+        className="bottom-0 left-0 absolute bg-red h-[2px]"
         animate={{ width: focused === name ? "100%" : "0%" }}
         transition={{ duration: 0.35, ease: "easeInOut" }}
       />
@@ -200,7 +200,7 @@ function QuizOption({
       variants={optV[dir]}
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.97 }}
-      className="flex items-center gap-3 px-5 py-4 font-condensed uppercase transition-colors duration-300 border text-left font-semibold"
+      className="flex items-center gap-3 px-5 py-4 border font-condensed font-semibold text-left uppercase transition-colors duration-300"
       style={{
         borderColor: selected ? "#FF1A1A" : "rgba(255,255,255,0.3)",
         color: selected ? "#fff" : "rgba(255,255,255,0.75)",
@@ -315,16 +315,16 @@ function Scene({
         {/* رقم شبحي كبير */}
         <span
           aria-hidden
-          className="absolute -top-9 right-3 font-bebas leading-none select-none pointer-events-none text-[110px] md:text-[150px] text-transparent"
+          className="-top-9 right-3 absolute font-bebas text-[110px] text-transparent md:text-[150px] leading-none pointer-events-none select-none"
           style={{ WebkitTextStroke: "1px rgba(255,40,40,0.35)" }}
         >
           {String(n).padStart(2, "0")}
         </span>
 
-        <div className="relative z-10 flex flex-col gap-5">
-          <div className="flex items-center gap-3 flex-wrap">
+        <div className="z-10 relative flex flex-col gap-5">
+          <div className="flex flex-wrap items-center gap-3">
             <span
-              className="font-bebas flex items-center justify-center w-7 h-7 rounded-full shrink-0 text-[13px] font-bold"
+              className="flex justify-center items-center rounded-full w-7 h-7 font-bebas font-bold text-[13px] shrink-0"
               style={{
                 border: "1.5px solid rgba(255,26,26,0.7)",
                 color: "#FF1A1A",
@@ -336,7 +336,7 @@ function Scene({
             <Label
               text={label}
               mode={mode}
-              className="font-condensed uppercase font-semibold text-white/90"
+              className="font-condensed font-semibold text-white/90 uppercase"
               style={{
                 letterSpacing: arabic ? "0" : "0.4em",
                 fontFamily: arabic ? "var(--font-barlow)" : undefined,
@@ -345,7 +345,7 @@ function Scene({
             />
             {sublabel && (
               <span
-                className="font-barlow text-sm font-medium text-white/40"
+                className="font-barlow font-medium text-white/40 text-sm"
                 style={{ direction: isArabic(sublabel) ? "rtl" : "ltr" }}
               >
                 ({sublabel})
@@ -372,28 +372,146 @@ const coachTypes = [
   { id: "storytelling", label: "ستوري تيلينج", icon: "◉" },
 ];
 
-/* TODO: بدّل اللينكات دي باللينكات الحقيقية بتاعة العميل */
-const briefs = [
-  { id: "brief1", label: "بريف ١", desc: "ريلز سريعة وحماسية", url: "https://example.com/brief-1" },
-  { id: "brief2", label: "بريف ٢", desc: "تصوير سينمائي هادي", url: "https://example.com/brief-2" },
-  { id: "brief3", label: "بريف ٣", desc: "محتوى تعليمي مبسط", url: "https://example.com/brief-3" },
+/* ─── Briefs Types & Data ──────────────────────────────────────
+   ملاحظة: يمكنك وضع أي عدد من لينكات الفيديوهات لكل بريف
+   الصيغ المدعومة:
+   - روابط يوتيوب عادية: https://www.youtube.com/watch?v=...
+   - روابط يوتيوب مختصرة: https://youtu.be/...
+   - يوتيوب شورتس: https://www.youtube.com/shorts/...
+   - ريلز إنستجرام: https://www.instagram.com/reel/...
+   - أو أي رابط خارجي آخر.
+   يمكنك كتابة اللينكات كمصفوفة روابط مباشرة أو مع عناوين مخصصة لكل فيديو.
+─────────────────────────────────────────────────────────────── */
+export type BriefVideoItem = {
+  title?: string;
+  url: string;
+};
+
+export type BriefItem = {
+  id: string;
+  label: string;
+  desc: string;
+  videos: (string | BriefVideoItem)[];
+};
+
+const briefs: BriefItem[] = [
+  {
+    id: "brief1",
+    label: "بريف ١",
+    desc: "ريلز سريعة وحماسية",
+    videos: [
+      {
+        title: "فيديو 1 - Storytelling",
+        url: "https://www.instagram.com/reel/Dc6pBoZITge/?cplk=MTA1NmNvaGNqbjB0Mw%3D%3D",
+      },
+      {
+        title: "فيديو 2",
+        url: "https://www.instagram.com/reel/DcUS10NNpy0/?obrf=eTV1YTdhejBvano5",
+      },
+    ],
+  },
+  {
+    id: "brief2",
+    label: "بريف ٢",
+    desc: "تصوير سينمائي هادي",
+    videos: [
+      {
+        title: "فيديو 1",
+        url: "https://www.instagram.com/reel/DdG02zgMQpg/?cplk=dHl0ZW90Z2lvb2Ux",
+      },
+      {
+        title: "فيديو 2",
+        url: "https://www.instagram.com/reel/DaqmDBfOEDb/?psln=MWdvd3BrZXgzMnZ1Mg%3D%3D",
+      },
+    ],
+  },
+  {
+    id: "brief3",
+    label: "بريف ٣",
+    desc: "محتوى تعليمي مبسط",
+    videos: [
+      {
+        title: "فيديو 1 - تعليمي",
+        url: "https://www.instagram.com/reel/DVB_j6tiEID/?xtok=MWs1eXE0dHNyeHhobg%3D%3D",
+      },
+      {
+        title: "فيديو 2",
+        url: "https://www.instagram.com/reel/Da27xlEjvpb/?exln=bmM4bG93azF3Ymtm",
+      },
+    ],
+  },
 ];
+
+/* تحويل الفيديوهات إلى صيغة موحدة */
+function normalizeBriefVideos(
+  videos?: (string | BriefVideoItem)[]
+): { title: string; url: string }[] {
+  if (!videos || !Array.isArray(videos)) return [];
+  return videos.map((v, i) => {
+    if (typeof v === "string") {
+      return { title: `فيديو ${i + 1}`, url: v };
+    }
+    return { title: v.title || `فيديو ${i + 1}`, url: v.url };
+  });
+}
+
+/* استخراج رابط التضمين المناسب لليوتيوب وإنستجرام */
+function parseVideoEmbed(url: string) {
+  if (!url) return { type: "unknown", embedUrl: "" };
+
+  const trimmed = url.trim();
+
+  // لو ID يوتيوب مباشر (11 حرف)
+  if (/^[\w-]{11}$/.test(trimmed)) {
+    return {
+      type: "youtube",
+      embedUrl: `https://www.youtube.com/embed/${trimmed}?autoplay=1&rel=0`,
+    };
+  }
+
+  // روابط يوتيوب بجميع أشكالها
+  const ytMatch = trimmed.match(
+    /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/
+  );
+  if (ytMatch && ytMatch[1]) {
+    return {
+      type: "youtube",
+      embedUrl: `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&rel=0`,
+    };
+  }
+
+  // روابط إنستجرام ريلز
+  const igMatch = trimmed.match(/instagram\.com\/(?:p|reel|tv)\/([a-zA-Z0-9_-]+)/);
+  if (igMatch && igMatch[1]) {
+    return {
+      type: "instagram",
+      embedUrl: `https://www.instagram.com/reel/${igMatch[1]}/embed`,
+    };
+  }
+
+  return {
+    type: "external",
+    embedUrl: trimmed,
+  };
+}
 
 /* ─── Brief card (بتدخل متروّحة، كل كارت بزاوية) ──────────── */
 function BriefCard({
   i,
   label,
   desc,
-  url,
+  videosCount,
   selected,
   onClick,
+  onWatch,
 }: {
   i: number;
   label: string;
   desc: string;
-  url: string;
+  videosCount: number;
   selected: boolean;
   onClick: () => void;
+  onWatch: () => void;
 }) {
   return (
     <motion.div
@@ -410,14 +528,14 @@ function BriefCard({
       onClick={onClick}
       whileHover={{ y: -6 }}
       whileTap={{ scale: 0.98 }}
-      className="cursor-pointer flex flex-col gap-3 p-5 border transition-colors duration-300 backdrop-blur-sm"
+      className="flex flex-col gap-3 backdrop-blur-sm p-5 border transition-colors duration-300 cursor-pointer"
       style={{
         borderColor: selected ? "#FF1A1A" : "rgba(255,255,255,0.3)",
         background: selected ? "rgba(204,0,0,0.25)" : "rgba(0,0,0,0.55)",
         direction: "rtl",
       }}
     >
-      <div className="flex items-center justify-between">
+      <div className="flex justify-between items-center">
         <span
           className="font-barlow font-semibold text-base"
           style={{ color: selected ? "#fff" : "rgba(255,255,255,0.85)" }}
@@ -426,31 +544,220 @@ function BriefCard({
         </span>
         {selected && <span style={{ color: "#FF1A1A" }}>✓</span>}
       </div>
-      <p className="font-barlow text-sm text-white/55 font-medium">{desc}</p>
-      <a
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={(e) => e.stopPropagation()}
-        className="font-condensed text-[11px] tracking-[0.35em] uppercase text-red hover:text-white transition-colors font-semibold"
+      <p className="font-barlow font-medium text-white/55 text-sm">{desc}</p>
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          onWatch();
+        }}
+        className="flex items-center gap-1.5 w-fit font-condensed font-semibold text-[11px] text-red hover:text-white uppercase tracking-[0.35em] transition-colors cursor-pointer"
         style={{ direction: "ltr", textAlign: "right" }}
       >
-        Watch →
-      </a>
+        <span>Watch {videosCount > 1 ? `(${videosCount})` : ""} →</span>
+      </button>
     </motion.div>
+  );
+}
+
+/* ─── نافذة عرض فيديوهات البريف المنبثقة (Modal) ─────────────── */
+function BriefVideosModal({
+  briefData,
+  onClose,
+}: {
+  briefData: {
+    label: string;
+    desc: string;
+    videos: { title: string; url: string }[];
+  };
+  onClose: () => void;
+}) {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
+
+  const currentVideo = briefData.videos[activeIndex] || briefData.videos[0];
+  const videoParsed = currentVideo ? parseVideoEmbed(currentVideo.url) : null;
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        className="z-50 fixed inset-0 flex justify-center items-center p-3 sm:p-5 md:p-8"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+        style={{
+          background: "rgba(0,0,0,0.88)",
+          backdropFilter: "blur(12px)",
+        }}
+      >
+        <motion.div
+          className="relative flex flex-col bg-[#090101] shadow-[0_0_50px_rgba(204,0,0,0.3)] border border-red-600/40 rounded-lg w-full max-w-4xl max-h-[92vh] overflow-hidden"
+          initial={{ scale: 0.93, opacity: 0, y: 20 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          exit={{ scale: 0.93, opacity: 0, y: 20 }}
+          transition={{ duration: 0.3 }}
+          onClick={(e) => e.stopPropagation()}
+          style={{ direction: "rtl" }}
+        >
+          {/* Header */}
+          <div className="flex justify-between items-center bg-black/60 px-5 py-4 border-white/10 border-b">
+            <div className="flex items-center gap-3">
+              <span className="flex justify-center items-center bg-red-600 rounded-full w-2.5 h-2.5 animate-pulse" />
+              <div>
+                <h3 className="font-barlow font-bold text-white text-base sm:text-lg">
+                  {briefData.label} — <span className="font-normal text-white/60">{briefData.desc}</span>
+                </h3>
+                <p className="mt-0.5 font-barlow text-white/40 text-xs">
+                  معاينة الفيديوهات ({activeIndex + 1} من {briefData.videos.length})
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="hover:bg-red-600/10 px-3 py-1.5 border border-white/15 hover:border-red-600 rounded text-white/70 hover:text-white text-xs uppercase tracking-widest transition-all cursor-pointer"
+            >
+              ✕ إغلاق
+            </button>
+          </div>
+
+          {/* Main Video View Area */}
+          <div className="flex flex-col flex-1 gap-4 p-4 sm:p-6 overflow-y-auto">
+            {/* Player Container */}
+            <div className="relative flex justify-center items-center bg-black border border-white/10 rounded w-full aspect-video overflow-hidden">
+              {videoParsed?.type === "youtube" ? (
+                <iframe
+                  key={videoParsed.embedUrl}
+                  src={videoParsed.embedUrl}
+                  title={currentVideo.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="border-0 w-full h-full"
+                />
+              ) : videoParsed?.type === "instagram" ? (
+                <div className="flex flex-col justify-center items-center bg-black/80 p-2 w-full h-full">
+                  <iframe
+                    key={videoParsed.embedUrl}
+                    src={videoParsed.embedUrl}
+                    title={currentVideo.title}
+                    className="border-0 rounded w-full max-w-[340px] h-full"
+                  />
+                </div>
+              ) : (
+                <div className="flex flex-col justify-center items-center gap-4 p-6 text-center">
+                  <span className="text-red-600 text-4xl">▶</span>
+                  <p className="font-medium text-white text-sm">{currentVideo?.title || "فيديو المعاينة"}</p>
+                  <a
+                    href={currentVideo?.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded font-semibold text-white text-xs uppercase tracking-wider transition-colors"
+                  >
+                    فتح رابط الفيديو ↗
+                  </a>
+                </div>
+              )}
+            </div>
+
+            {/* Video Controls & Playlist Switcher */}
+            {briefData.videos.length > 1 && (
+              <div className="flex flex-col gap-2 mt-2">
+                <div className="flex justify-between items-center">
+                  <span className="font-barlow text-white/50 text-xs">
+                    اختر الفيديو للمشاهدة:
+                  </span>
+
+                  {/* Prev / Next buttons */}
+                  <div className="flex items-center gap-2" style={{ direction: "ltr" }}>
+                    <button
+                      type="button"
+                      disabled={activeIndex === 0}
+                      onClick={() => setActiveIndex((prev) => Math.max(0, prev - 1))}
+                      className="disabled:opacity-30 px-2.5 py-1 border border-white/15 hover:border-red-600 rounded text-white/70 hover:text-white text-xs transition-all cursor-pointer disabled:pointer-events-none"
+                    >
+                      ← السابق
+                    </button>
+                    <button
+                      type="button"
+                      disabled={activeIndex === briefData.videos.length - 1}
+                      onClick={() => setActiveIndex((prev) => Math.min(briefData.videos.length - 1, prev + 1))}
+                      className="disabled:opacity-30 px-2.5 py-1 border border-white/15 hover:border-red-600 rounded text-white/70 hover:text-white text-xs transition-all cursor-pointer disabled:pointer-events-none"
+                    >
+                      التالي →
+                    </button>
+                  </div>
+                </div>
+
+                {/* Playlist Tabs / Badges */}
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {briefData.videos.map((vid, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setActiveIndex(idx)}
+                      className={`flex items-center gap-2 px-3 py-2 rounded text-xs font-medium transition-all cursor-pointer ${
+                        activeIndex === idx
+                          ? "border border-red-600 bg-red-600/20 text-white shadow-[0_0_15px_rgba(204,0,0,0.3)]"
+                          : "border border-white/10 bg-white/5 text-white/60 hover:text-white hover:border-white/20"
+                      }`}
+                    >
+                      <span className={activeIndex === idx ? "text-red-500 font-bold" : "text-white/40"}>
+                        {activeIndex === idx ? "●" : "○"}
+                      </span>
+                      <span>{vid.title || `فيديو ${idx + 1}`}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Direct Link button at bottom */}
+            {currentVideo?.url && (
+              <div className="flex justify-end pt-2 border-white/5 border-t">
+                <a
+                  href={currentVideo.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-white/40 hover:text-red-500 text-xs transition-colors"
+                >
+                  <span>مشاهدة الفيديو على المنصة الأصلية</span>
+                  <span>↗</span>
+                </a>
+              </div>
+            )}
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 }
 
 /* ─── WhatsApp Section ───────────────────────────────────────── */
 function WhatsAppSection() {
   return (
-    <section className="pb-16 pt-6 flex flex-col items-center justify-center gap-5 relative z-10">
+    <section className="z-10 relative flex flex-col justify-center items-center gap-5 pt-6 pb-16">
       <motion.p
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="text-[12px] tracking-[0.55em] uppercase text-white font-semibold"
+        className="font-semibold text-[12px] text-white uppercase tracking-[0.55em]"
         style={{ fontFamily: "var(--font-condensed)" }}
       >
         connect to whatsApp
@@ -469,7 +776,7 @@ function WhatsAppSection() {
         <motion.div
           animate={{ y: [0, -12, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="relative flex items-center justify-center w-20 h-20 rounded-full"
+          className="relative flex justify-center items-center rounded-full w-20 h-20"
           style={{ background: "rgba(37,211,102,0.12)", border: "1px solid rgba(37,211,102,0.25)" }}
         >
           <motion.div
@@ -508,6 +815,11 @@ export default function ContactPage() {
   const [hasScript, setHasScript] = useState<"yes" | "no" | "">("");
   const [brief, setBrief] = useState("");
   const [customBrief, setCustomBrief] = useState("");
+  const [activeBriefVideos, setActiveBriefVideos] = useState<{
+    label: string;
+    desc: string;
+    videos: { title: string; url: string }[];
+  } | null>(null);
 
   const isCoach = role === "coach";
 
@@ -578,6 +890,7 @@ export default function ContactPage() {
         setHasScript("");
         setBrief("");
         setCustomBrief("");
+        setActiveBriefVideos(null);
       } else throw new Error();
     } catch {
       alert("Something went wrong. Please try again.");
@@ -592,9 +905,9 @@ export default function ContactPage() {
       {/* clipPath بيمنع الخلفية الثابتة تغطي الفوتر */}
       <div className="relative" style={{ background: "#030000", clipPath: "inset(0)" }}>
         {/* ── Background images (ثابتة + parallax، واضحة أكتر) ── */}
-        <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="z-0 fixed inset-0 overflow-hidden pointer-events-none">
           <motion.div
-            className="absolute -top-20 right-0 w-full md:w-[60%] h-[60vh] md:h-[85vh]"
+            className="-top-20 right-0 absolute w-full md:w-[60%] h-[60vh] md:h-[85vh]"
             style={{
               y: img1Y,
               backgroundImage: "url('/images/1.jpg')",
@@ -607,7 +920,7 @@ export default function ContactPage() {
             }}
           />
           <motion.div
-            className="absolute -bottom-20 left-0 w-full md:w-[60%] h-[60vh] md:h-[85vh]"
+            className="-bottom-20 left-0 absolute w-full md:w-[60%] h-[60vh] md:h-[85vh]"
             style={{
               y: img2Y,
               backgroundImage: "url('/images/2.jpg')",
@@ -632,8 +945,8 @@ export default function ContactPage() {
           />
         </div>
 
-        <main className="relative z-10 min-h-screen grain pt-20 md:pt-[100px]" style={{ background: "transparent" }}>
-          <div className="max-w-6xl mx-auto px-4 sm:px-8 md:px-12 py-10">
+        <main className="z-10 relative pt-20 md:pt-[100px] min-h-screen grain" style={{ background: "transparent" }}>
+          <div className="mx-auto px-4 sm:px-8 md:px-12 py-10 max-w-6xl">
             {/* ══ HERO ══ */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
@@ -641,19 +954,19 @@ export default function ContactPage() {
               transition={{ duration: 0.5 }}
               className="flex items-center gap-3 mb-10 md:mb-14"
             >
-              <div className="h-px w-8 bg-red" />
-              <span className="font-condensed text-[13px] tracking-[0.6em] text-red uppercase font-semibold">
+              <div className="bg-red w-8 h-px" />
+              <span className="font-condensed font-semibold text-[13px] text-red uppercase tracking-[0.6em]">
                 Get In <span className="text-red-600">Touch</span>
               </span>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr] gap-10 md:gap-16 items-end mb-24 md:mb-32">
+            <div className="items-end gap-10 md:gap-16 grid grid-cols-1 md:grid-cols-[1.2fr_1fr] mb-24 md:mb-32">
               <div>
                 <motion.h1
                   initial="hidden"
                   animate="show"
                   variants={{ hidden: {}, show: { transition: { staggerChildren: 0.2 } } }}
-                  className="font-bebas leading-[0.92] mb-6 font-bold"
+                  className="mb-6 font-bebas font-bold leading-[0.92]"
                   style={{ fontSize: "clamp(56px, 8vw, 110px)", letterSpacing: "0.04em" }}
                 >
                   <span className="block text-white">
@@ -663,7 +976,7 @@ export default function ContactPage() {
                     <Label text="Connect" mode="drop" />
                   </span>
                 </motion.h1>
-                <p className="font-barlow text-base text-white/70 leading-relaxed max-w-md font-medium">
+                <p className="max-w-md font-barlow font-medium text-white/70 text-base leading-relaxed">
                   Have a vision or an idea? Fill in the form and I will get back to you within 24 hours. Every
                   great photo starts with a conversation.
                 </p>
@@ -673,18 +986,18 @@ export default function ContactPage() {
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="bg-black/40 backdrop-blur-[3px] border border-white/10 px-6"
+                className="bg-black/40 backdrop-blur-[3px] px-6 border border-white/10"
               >
                 {[
                   { label: "Phone", value: "+201227957008" },
                   { label: "Based in", value: "Cairo, Egypt" },
                   { label: "Available", value: "Worldwide" },
                 ].map((item) => (
-                  <div key={item.label} className="flex items-center gap-6 py-5 border-b border-white/20 last:border-b-0">
-                    <span className="font-condensed text-[12px] tracking-[0.45em] text-red/90 uppercase w-24 shrink-0 font-semibold">
+                  <div key={item.label} className="flex items-center gap-6 py-5 border-white/20 border-b last:border-b-0">
+                    <span className="w-24 font-condensed font-semibold text-[12px] text-red/90 uppercase tracking-[0.45em] shrink-0">
                       {item.label}
                     </span>
-                    <span className="font-barlow text-base text-white/80 font-medium">{item.value}</span>
+                    <span className="font-barlow font-medium text-white/80 text-base">{item.value}</span>
                   </div>
                 ))}
               </motion.div>
@@ -698,7 +1011,7 @@ export default function ContactPage() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.5 }}
-                  className="flex flex-col items-center justify-center text-center gap-8 py-24"
+                  className="flex flex-col justify-center items-center gap-8 py-24 text-center"
                 >
                   <div className="relative w-20 h-20">
                     <motion.div
@@ -712,21 +1025,21 @@ export default function ContactPage() {
                       }}
                       transition={{ duration: 2, repeat: Infinity }}
                     />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-red text-2xl font-bold">✓</span>
+                    <div className="absolute inset-0 flex justify-center items-center">
+                      <span className="font-bold text-red text-2xl">✓</span>
                     </div>
                   </div>
                   <div>
-                    <h3 className="font-bebas text-5xl md:text-6xl text-white tracking-widest mb-3 font-bold">
+                    <h3 className="mb-3 font-bebas font-bold text-white text-5xl md:text-6xl tracking-widest">
                       Message Sent!
                     </h3>
-                    <p className="font-barlow text-base text-white/60 leading-relaxed max-w-sm font-medium">
+                    <p className="max-w-sm font-barlow font-medium text-white/60 text-base leading-relaxed">
                       We have received your message and will be in touch within 24 hours.
                     </p>
                   </div>
                   <button
                     onClick={() => setSent(false)}
-                    className="font-condensed text-xs tracking-[0.5em] uppercase px-8 py-3 border border-red/30 text-white/60 hover:text-white hover:border-red transition-all duration-300 font-semibold"
+                    className="px-8 py-3 border border-red/30 hover:border-red font-condensed font-semibold text-white/60 hover:text-white text-xs uppercase tracking-[0.5em] transition-all duration-300"
                   >
                     Send Another
                   </button>
@@ -736,9 +1049,9 @@ export default function ContactPage() {
                   {/* ══ ZIGZAG QUIZ ══ */}
                   <div ref={trackRef} className="relative flex flex-col gap-20 md:gap-28 pb-24">
                     {/* الخط الأساسي */}
-                    <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px -translate-x-1/2 bg-white/15" />
+                    <div className="top-0 bottom-0 left-4 md:left-1/2 absolute bg-white/15 w-px -translate-x-1/2" />
                     <motion.div
-                      className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[2px]"
+                      className="top-0 bottom-0 left-4 md:left-1/2 absolute w-[2px]"
                       style={{
                         x: "-50%",
                         scaleY: lineScale,
@@ -773,7 +1086,7 @@ export default function ContactPage() {
                           animate={{ opacity: 1, height: "auto" }}
                           exit={{ opacity: 0, height: 0 }}
                           transition={{ duration: 0.4 }}
-                          className="overflow-hidden -mx-8 px-8 -my-2 py-2"
+                          className="-mx-8 -my-2 px-8 py-2 overflow-hidden"
                         >
                           <Scene
                             n={num.coach}
@@ -895,26 +1208,35 @@ export default function ContactPage() {
                       anim="blur"
                       mode="side"
                       label="اختار أقرب بريف ليك"
-                      sublabel="أو خليه كاستم"
                     >
                       <div className="flex flex-col gap-4">
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                          {briefs.map((b, i) => (
-                            <BriefCard
-                              key={b.id}
-                              i={i}
-                              label={b.label}
-                              desc={b.desc}
-                              url={b.url}
-                              selected={brief === b.id}
-                              onClick={() => setBrief(b.id)}
-                            />
-                          ))}
+                        <div className="gap-3 grid grid-cols-1 sm:grid-cols-3">
+                          {briefs.map((b, i) => {
+                            const normalized = normalizeBriefVideos(b.videos);
+                            return (
+                              <BriefCard
+                                key={b.id}
+                                i={i}
+                                label={b.label}
+                                desc={b.desc}
+                                videosCount={normalized.length}
+                                selected={brief === b.id}
+                                onClick={() => setBrief(b.id)}
+                                onWatch={() =>
+                                  setActiveBriefVideos({
+                                    label: b.label,
+                                    desc: b.desc,
+                                    videos: normalized,
+                                  })
+                                }
+                              />
+                            );
+                          })}
                         </div>
 
                         <div>
                           <QuizOption
-                            label="كاستمايز — عايز حاجة مختلفة"
+                            label="customize — عايز حاجة مختلفة"
                             icon="✎"
                             dir="up"
                             selected={brief === "custom"}
@@ -956,13 +1278,13 @@ export default function ContactPage() {
                     initial="hidden"
                     whileInView="show"
                     viewport={VIEW}
-                    className="max-w-2xl mx-auto p-6 md:p-10 bg-black/50 backdrop-blur-[3px] border border-white/10 border-t-2 border-t-red"
+                    className="bg-black/50 backdrop-blur-[3px] mx-auto p-6 md:p-10 border border-white/10 border-t-2 border-t-red max-w-2xl"
                   >
                     <div className="mb-10 text-center">
                       <Label
                         text="Your Details"
                         mode="drop"
-                        className="font-condensed uppercase font-semibold text-white/80 justify-center text-[13px]"
+                        className="justify-center font-condensed font-semibold text-[13px] text-white/80 uppercase"
                         style={{ letterSpacing: "0.6em" }}
                       />
                     </div>
@@ -982,7 +1304,7 @@ export default function ContactPage() {
                         />
                       </Field>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div className="gap-6 grid grid-cols-1 sm:grid-cols-2">
                         <Field label="Email" required name="email" focused={focused} value={form.email}>
                           <input
                             type="email"
@@ -1029,7 +1351,7 @@ export default function ContactPage() {
                         disabled={loading}
                         whileHover={!loading ? "hover" : undefined}
                         whileTap={!loading ? { scale: 0.98 } : undefined}
-                        className="relative group w-full overflow-hidden font-condensed tracking-[0.5em] uppercase text-sm py-5 border border-red text-white transition-colors duration-500 disabled:opacity-30 disabled:cursor-not-allowed font-semibold"
+                        className="group relative disabled:opacity-30 py-5 border border-red w-full overflow-hidden font-condensed font-semibold text-white text-sm uppercase tracking-[0.5em] transition-colors duration-500 disabled:cursor-not-allowed"
                       >
                         {!loading && (
                           <motion.span
@@ -1046,10 +1368,10 @@ export default function ContactPage() {
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}
                               exit={{ opacity: 0 }}
-                              className="relative z-10 flex items-center justify-center gap-3 text-red"
+                              className="z-10 relative flex justify-center items-center gap-3 text-red"
                             >
                               <motion.span
-                                className="w-4 h-4 border border-red/40 border-t-red rounded-full"
+                                className="border border-red/40 border-t-red rounded-full w-4 h-4"
                                 animate={{ rotate: 360 }}
                                 transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
                               />
@@ -1061,7 +1383,7 @@ export default function ContactPage() {
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}
                               exit={{ opacity: 0 }}
-                              className="relative z-10 flex items-center justify-center gap-4"
+                              className="z-10 relative flex justify-center items-center gap-4"
                             >
                               Send Message
                               <motion.span variants={{ hover: { x: 6 } }} transition={{ duration: 0.25 }}>
@@ -1072,7 +1394,7 @@ export default function ContactPage() {
                         </AnimatePresence>
                       </motion.button>
 
-                      <p className="font-condensed text-[11px] tracking-[0.5em] text-white/40 text-center uppercase font-semibold">
+                      <p className="font-condensed font-semibold text-[11px] text-white/40 text-center uppercase tracking-[0.5em]">
                         We respond within 24 hours
                       </p>
                     </form>
@@ -1084,6 +1406,12 @@ export default function ContactPage() {
         </main>
         <WhatsAppSection />
       </div>
+      {activeBriefVideos && (
+        <BriefVideosModal
+          briefData={activeBriefVideos}
+          onClose={() => setActiveBriefVideos(null)}
+        />
+      )}
       <Footer />
     </MotionConfig>
   );

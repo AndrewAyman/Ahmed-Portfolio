@@ -40,11 +40,6 @@ export const CATEGORIES: Category[] = [
     img: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=480&h=320&fit=crop&auto=format",
   },
   {
-    id: "Product",
-    label: "Product",
-    img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=480&h=320&fit=crop&auto=format",
-  },
-  {
     id: "Factories",
     label: "Factories",
     img: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=480&h=320&fit=crop&auto=format",

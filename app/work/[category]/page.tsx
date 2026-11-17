@@ -106,16 +106,6 @@ function VideoCard({
           </div>
         </div>
       </div>
-
-      <div className="mt-3">
-        <h3 className="text-sm font-semibold uppercase tracking-wider text-white/80">
-          {video.title}
-        </h3>
-
-        <p className="mt-1 text-xs text-white/35">
-          {video.client} · {video.year}
-        </p>
-      </div>
     </motion.button>
   );
 }
